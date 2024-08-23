@@ -1,0 +1,96 @@
+{
+    "categories": [
+        {
+            "id": "c4ef9bc2-d6c8-435f-81a2-aaa6d2891bc3",
+            "title": "Terror",
+            "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+        },
+        {
+            "id": "05b5d75c-dd9e-4fa9-be64-51e8b4509b96",
+            "title": "Ficção",
+            "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+        },
+        {
+            "id": "785bd9f7-eb00-4703-b84b-a8b38814bdd8",
+            "title": "Ação",
+            "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+        }
+    ],
+    "books": [
+        {
+            "id": "7e879e06-0f6a-45e6-8eb7-115a5dee0ef0",
+            "title": "Como treinar o seu dragão",
+            "available": true,
+            "rating": 4.6,
+            "categories": [
+                {
+                    "id": "c4ef9bc2-d6c8-435f-81a2-aaa6d2891bc3",
+                    "title": "Terror",
+                    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                },
+                {
+                    "id": "05b5d75c-dd9e-4fa9-be64-51e8b4509b96",
+                    "title": "Ficção",
+                    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                }
+            ],
+            "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+            "image": "https://encadernacaocapadura.com/wp-content/uploads/2022/05/livro-capa-dura.jpg",
+            "pdf": "https://eppg.fgv.br/sites/default/files/teste.pdf",
+            "company_id": "202c0a95-d401-4598-82bc-4901f871d359",
+            "has_ebook": true,
+            "created_at": "2024-04-23 18:05:25",
+            "updated_at": "2024-04-23 18:05:25"
+        },
+        {
+            "id": "5579dd2e-ed72-417b-9f64-077fe86dda27",
+            "title": "Diário de um banana",
+            "available": true,
+            "rating": 4.2,
+            "categories": [
+                {
+                    "id": "785bd9f7-eb00-4703-b84b-a8b38814bdd8",
+                    "title": "Ação",
+                    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                }
+            ],
+            "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+            "image": "https://encadernacaocapadura.com/wp-content/uploads/2022/05/livro-capa-dura.jpg",
+            "pdf": "https://eppg.fgv.br/sites/default/files/teste.pdf",
+            "company": "de41f0b8-d27a-4722-bcbd-16d2583ed4c4",
+            "has_ebook": true,
+            "created_at": "2024-04-23 18:05:25",
+            "updated_at": "2024-04-23 18:05:25"
+        },
+        {
+            "id": "5579dd2e-ed72-417b-9f64-077fe86dda27",
+            "title": "Diário de um banana",
+            "available": true,
+            "rating": 4.2,
+            "categories": [
+                {
+                    "id": "785bd9f7-eb00-4703-b84b-a8b38814bdd8",
+                    "title": "Ação",
+                    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                },
+                {
+                    "id": "c4ef9bc2-d6c8-435f-81a2-aaa6d2891bc3",
+                    "title": "Terror",
+                    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                },
+                {
+                    "id": "05b5d75c-dd9e-4fa9-be64-51e8b4509b96",
+                    "title": "Ficção",
+                    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                }
+            ],
+            "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+            "image": "https://encadernacaocapadura.com/wp-content/uploads/2022/05/livro-capa-dura.jpg",
+            "pdf": "https://eppg.fgv.br/sites/default/files/teste.pdf",
+            "company": "de41f0b8-d27a-4722-bcbd-16d2583ed4c4",
+            "has_ebook": true,
+            "created_at": "2024-04-23 18:05:25",
+            "updated_at": "2024-04-23 18:05:25"
+        }
+    ]
+}
