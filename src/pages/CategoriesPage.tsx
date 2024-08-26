@@ -21,7 +21,7 @@ export const CategoriesPage = () => {
             {categories.isSuccess && categories.data.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-9">
                     {categories.data.map((category: ICategory) => (
-                        <CategoriesCard category={category} />
+                        <CategoriesCard category={category} key={category.id}/>
                     ))}
                 </div>
             )}

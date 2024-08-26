@@ -5,12 +5,17 @@ import { Ratings } from '../ui/rating'
 import { Button } from '../ui/button'
 import { HeartIcon, PlusCircle } from 'lucide-react'
 import { toast } from '../ui/use-toast'
+import { useNavigate } from 'react-router-dom'
 
 interface Props {
     book: IBook
 }
 
 export const BooksCard = ({ book }: Props) => {
+    const navigate = useNavigate();
+    const handleClick = (id: IBook["id"])=>{
+        navigate(`/livro/${id}`);
+    }
     return (
         <div className="overflow-hidden rounded-md border border-blue-100">
             <div className="overflow-hidden h-[200px]">
@@ -18,8 +23,8 @@ export const BooksCard = ({ book }: Props) => {
             </div>
             <div className="p-5 bg-[#fff]">
                 <div className="flex gap-2 flex-wrap mb-3">
-                    {book.categories.map((category: ICategory) => (
-                        <Badge variant={'secondary'}>{category.title}</Badge>
+                    {book.categories.map((category: ICategory, index) => (
+                        <Badge variant={'secondary'}  key={index}>{category.title}</Badge>
                     ))}
                 </div>
                 <Ratings rating={book.rating} size={16} variant="yellow" className="mb-1" />
@@ -29,7 +34,7 @@ export const BooksCard = ({ book }: Props) => {
                     {book.description}
                 </div>
                 <div className="flex mt-5 gap-3">
-                    <Button variant={'blue'} size={'sm'}>
+                    <Button variant={'blue'} size={'sm'} onClick={()=> handleClick(book.id)}>
                         Ver mais <PlusCircle size={16} className="ms-2" />{' '}
                     </Button>
                     <Button
