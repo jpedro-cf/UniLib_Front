@@ -33,6 +33,14 @@ const mockResponse = (): Promise<any> => {
                             description: 'Descrição',
                             image: 'https://image.png',
                             createdAt: '2024-09-02T17:40:37.689+00:00'
+                        },
+                        {
+                            id: 'bd260a9b-6448-480c-9ccf-0d2e2240c2a5',
+                            name: 'Empresa Usuario',
+                            description:
+                                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+                            image: 'https://img.freepik.com/vetores-gratis/vetor-de-gradiente-de-logotipo-colorido-de-passaro_343694-1365.jpg',
+                            createdAt: '2024-09-02T17:40:37.689+00:00'
                         }
                     ]
                 }

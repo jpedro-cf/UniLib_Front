@@ -1,8 +1,9 @@
 import { PropsWithChildren } from 'react'
 import { Sidebar } from './Sidebar'
-type ProtectedRouteProps = PropsWithChildren
 
-const Layout = ({ children }: ProtectedRouteProps) => {
+type Props = PropsWithChildren
+
+export const Layout = ({ children }: Props) => {
     return (
         <div className="flex">
             <Sidebar />
@@ -10,5 +11,3 @@ const Layout = ({ children }: ProtectedRouteProps) => {
         </div>
     )
 }
-
-export default Layout
