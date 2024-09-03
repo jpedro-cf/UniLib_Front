@@ -6,7 +6,7 @@ const Layout = ({ children }: ProtectedRouteProps) => {
     return (
         <div className="flex">
             <Sidebar />
-            <main className="w-full min-h-screen bg-slate-50 p-5">{children}</main>
+            <main className="ml-[225px] w-full min-h-screen bg-slate-50 p-5">{children}</main>
         </div>
     )
 }
