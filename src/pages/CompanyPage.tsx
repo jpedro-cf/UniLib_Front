@@ -48,7 +48,7 @@ export const CompanyPage = () => {
                     {!users.isLoading && !users.isError && (
                         <div className="mt-5">
                             <h2 className="text-lg font-semibold mb-3">Equipe</h2>
-                            <div className="grid grid-cols-3 gap-5">
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                                 {users.data?.map((user: IUser) => (
                                     <UserCard user={user} />
                                 ))}

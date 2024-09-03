@@ -40,6 +40,7 @@ export const EditCompanyForm = ({ company }: Props) => {
                 variant: 'default',
                 description: <div>Empresa edita com sucesso.</div>
             })
+            window.location.reload()
         },
         onError: () => {
             toast({
@@ -47,7 +48,6 @@ export const EditCompanyForm = ({ company }: Props) => {
                 variant: 'destructive',
                 description: <div>Ocorreu um erro ao editar a empresa.</div>
             })
-            window.location.reload()
         }
     })
     function onSubmit(values: z.infer<typeof EditCompanyFormSchema>) {
@@ -57,6 +57,7 @@ export const EditCompanyForm = ({ company }: Props) => {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-5 w-full bg-[#fff] p-8 rounded-md border">
+                {/* Fazer a imagem como um input type file */}
                 <div className="h-[250px] w-[250px] rounded-full overflow-hidden border">
                     <img src={company.image} alt={company.name} className="w-full h-full object-cover" />
                 </div>
@@ -78,7 +79,7 @@ export const EditCompanyForm = ({ company }: Props) => {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Descrição:</FormLabel>
-                                <Textarea placeholder="Descrição" {...field} />
+                                <Textarea rows={6} placeholder="Descrição" {...field} />
                                 <FormMessage />
                             </FormItem>
                         )}
