@@ -16,7 +16,7 @@ export const useBooks = () => {
 
     return results
 }
-export const useBook = (id: IBook["id"])=>{
+export const useBook = (id: IBook['id']) => {
     const submit = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         const res = await axios.get(`${env.base_url}/books/${id}`)
@@ -25,8 +25,9 @@ export const useBook = (id: IBook["id"])=>{
 
     const result = useQuery({
         queryKey: ['book'],
-        queryFn: submit
+        queryFn: submit,
+        retry: false
     })
 
-    return result;
+    return result
 }

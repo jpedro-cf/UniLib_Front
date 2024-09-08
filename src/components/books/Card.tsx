@@ -12,9 +12,9 @@ interface Props {
 }
 
 export const BooksCard = ({ book }: Props) => {
-    const navigate = useNavigate();
-    const handleClick = (id: IBook["id"])=>{
-        navigate(`/livro/${id}`);
+    const navigate = useNavigate()
+    const handleClick = (id: IBook['id']) => {
+        navigate(`/livro/${id}`, { replace: true })
     }
     return (
         <div className="overflow-hidden rounded-md border border-blue-100">
@@ -24,7 +24,9 @@ export const BooksCard = ({ book }: Props) => {
             <div className="p-5 bg-[#fff]">
                 <div className="flex gap-2 flex-wrap mb-3">
                     {book.categories.map((category: ICategory, index) => (
-                        <Badge variant={'secondary'}  key={index}>{category.title}</Badge>
+                        <Badge variant={'secondary'} key={index}>
+                            {category.title}
+                        </Badge>
                     ))}
                 </div>
                 <Ratings rating={book.rating} size={16} variant="yellow" className="mb-1" />
@@ -34,13 +36,13 @@ export const BooksCard = ({ book }: Props) => {
                     {book.description}
                 </div>
                 <div className="flex mt-5 gap-3">
-                    <Button variant={'blue'} size={'sm'} onClick={()=> handleClick(book.id)}>
+                    <Button variant={'blue'} size={'sm'} onClick={() => handleClick(book.id)}>
                         Ver mais <PlusCircle size={16} className="ms-2" />{' '}
                     </Button>
                     <Button
                         variant={'outline'}
                         size={'sm'}
-                        className="text-destructive  hover:text-slate-100 hover:border-destructive hover:bg-destructive"
+                        className="text-destructive hover:text-slate-100 hover:border-destructive hover:bg-destructive"
                         onClick={() =>
                             toast({
                                 variant: 'default',
