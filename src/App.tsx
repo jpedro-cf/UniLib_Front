@@ -4,6 +4,7 @@ import { BooksPage } from './pages/BooksPage'
 import { CategoriesPage } from './pages/CategoriesPage'
 import { BookPage } from './pages/BookPage'
 import { CompanyPage } from './pages/CompanyPage'
+import { Reader } from './pages/Reader'
 import ProtectedRoute from './components/global/ProtectedRoute'
 
 const router = createBrowserRouter([
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
                 <Layout children={<CompanyPage />} />
             </ProtectedRoute>
         )
+    },
+    {
+        path: '/livro/:id/reader',
+        element: <Layout children={<Reader />} />
     }
 ])
 

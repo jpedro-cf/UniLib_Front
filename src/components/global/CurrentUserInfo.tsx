@@ -16,6 +16,7 @@ export function CurrentUserInfo() {
 
     if (!auth.user) {
         return
+        // ancora para a pagina de login?
     }
 
     return (
@@ -34,7 +35,7 @@ export function CurrentUserInfo() {
                 </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="ms-2 w-56">
-                <DropdownMenuLabel>Perfil</DropdownMenuLabel>
+                <DropdownMenuLabel className='cursor-default'>Perfil</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuItem>
@@ -51,7 +52,7 @@ export function CurrentUserInfo() {
                 {auth.companies && (
                     <>
                         <DropdownMenuSeparator />
-                        <DropdownMenuLabel>Empresas</DropdownMenuLabel>
+                        <DropdownMenuLabel className='cursor-default'>Empresas</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             {auth.companies.map((company) => (

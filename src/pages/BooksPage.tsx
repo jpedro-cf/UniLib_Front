@@ -8,7 +8,7 @@ export const BooksPage = () => {
 
     return (
         <>
-            <h1 className="text-xl font-semibold mb-9">Livros</h1>
+            <h1 className="text-xl font-semibold mb-9 cursor-default">Livros</h1>
 
             {(books.isLoading || books.isError || books.data?.length <= 0) && (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-9">
@@ -20,8 +20,8 @@ export const BooksPage = () => {
 
             {books.isSuccess && books.data?.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-9">
-                    {books.data.map((book: IBook, index: number) => (
-                        <BooksCard book={book} key={index} />
+                    {books.data.map((book: IBook) => (
+                        <BooksCard book={book} key={book.id} />
                     ))}
                 </div>
             )}
