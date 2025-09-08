@@ -7,7 +7,7 @@ export const Layout = ({ children }: Props) => {
     return (
         <div className="flex">
             <Sidebar />
-            <main className="lg:ml-[225px] w-full min-h-screen bg-slate-50 p-5">{children}</main>
+            <main className=" w-full min-h-screen bg-slate-50 p-5">{children}</main>
         </div>
     )
 }

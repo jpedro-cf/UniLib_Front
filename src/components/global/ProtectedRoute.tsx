@@ -5,19 +5,14 @@ import { useAuth } from '@/context/auth-context'
 
 interface Props {
     children: ReactNode
-    roles: string[]
 }
 
-export default function ProtectedRoute({ children, roles }: Props) {
+export default function ProtectedRoute({ children }: Props) {
     const { user } = useAuth()
     const navigate = useNavigate()
 
     useEffect(() => {
         if (user === null) {
-            navigate('/', { replace: true })
-        }
-
-        if (user && !user.roles.some((r) => roles.includes(r))) {
             navigate('/', { replace: true })
         }
     }, [navigate, user])

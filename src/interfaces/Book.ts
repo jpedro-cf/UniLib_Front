@@ -23,3 +23,8 @@ export interface IBook {
     created_at: Date
     updated_at: Date
 }
+
+export interface IReadBookResponse {
+    url: string
+    book: IBook
+}

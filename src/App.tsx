@@ -21,16 +21,20 @@ const router = createBrowserRouter([
         element: <Layout children={<BookPage />} />
     },
     {
-        path: '/admin/empresas/:id',
+        path: '/livro/:id/reader',
         element: (
-            <ProtectedRoute roles={['admin', 'manager', 'editor']}>
-                <Layout children={<CompanyPage />} />
+            <ProtectedRoute>
+                <Layout children={<Reader />} />
             </ProtectedRoute>
         )
     },
     {
-        path: '/livro/:id/reader',
-        element: <Layout children={<Reader />} />
+        path: '/admin/empresas/:id',
+        element: (
+            <ProtectedRoute>
+                <Layout children={<CompanyPage />} />
+            </ProtectedRoute>
+        )
     }
 ])
 

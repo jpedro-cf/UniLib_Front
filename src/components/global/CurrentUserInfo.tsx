@@ -35,7 +35,7 @@ export function CurrentUserInfo() {
                 </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="ms-2 w-56">
-                <DropdownMenuLabel className='cursor-default'>Perfil</DropdownMenuLabel>
+                <DropdownMenuLabel className="cursor-default">Perfil</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuItem>
@@ -52,7 +52,7 @@ export function CurrentUserInfo() {
                 {auth.companies && (
                     <>
                         <DropdownMenuSeparator />
-                        <DropdownMenuLabel className='cursor-default'>Empresas</DropdownMenuLabel>
+                        <DropdownMenuLabel className="cursor-default">Empresas</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             {auth.companies.map((company) => (
@@ -65,6 +65,12 @@ export function CurrentUserInfo() {
                         </DropdownMenuGroup>
                     </>
                 )}
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel className="cursor-default hover:bg-slate-100">
+                    <NavLink to={`/admin/empresas`} className={'w-full h-full block'}>
+                        Criar Nova Empresa
+                    </NavLink>
+                </DropdownMenuLabel>
             </DropdownMenuContent>
         </DropdownMenu>
     )
