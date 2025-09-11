@@ -1,11 +1,9 @@
 import { CompanyBooks } from '@/components/companies/CompanyBooks'
-import { CompanyForm } from '@/components/forms/companies/CompanyForm'
+import { CompanyMembers } from '@/components/companies/CompanyMembers'
+import { CompanyForm } from '@/components/companies/CompanyForm'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { UserCard } from '@/components/users/Card'
 import { useAuth } from '@/context/auth-context'
-import { IUser } from '@/interfaces/User'
 import { useCompany } from '@/services/companies'
-import { useUsers } from '@/services/users'
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -24,7 +22,6 @@ export const CompanyPage = () => {
     }
 
     const { data: company, isLoading, isRefetching, isError, refetch } = useCompany(id!)
-    const users = useUsers()
 
     useEffect(() => {
         refetch()
@@ -50,16 +47,7 @@ export const CompanyPage = () => {
                 </TabsList>
                 <TabsContent value="details">
                     <CompanyForm company={company} />
-                    {!users.isLoading && !users.isError && (
-                        <div className="mt-5">
-                            <h2 className="text-lg font-semibold mb-3">Equipe</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-                                {users.data?.map((user: IUser) => (
-                                    <UserCard user={user} />
-                                ))}
-                            </div>
-                        </div>
-                    )}
+                    <CompanyMembers company_id={company.id} />
                 </TabsContent>
                 <TabsContent value="books">
                     <CompanyBooks id={company.id} />

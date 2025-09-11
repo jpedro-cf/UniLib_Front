@@ -1,10 +1,18 @@
 import { env } from '@/config/env'
-import { ICurrentUserData } from '@/interfaces/User'
+import { ICurrentUserData, IUser } from '@/interfaces/User'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 
+export const mockUser = (): IUser => {
+    return {
+        email: 'email@email.com',
+        id: '123',
+        name: 'nome'
+    }
+}
+
 export const useUsers = () => {
-    const submit = async () => {
+    const submit = async (): Promise<IUser[]> => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         const res = await axios.get(`${env.base_url}/users`)
         return res.data

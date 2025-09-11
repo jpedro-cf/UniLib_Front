@@ -9,7 +9,12 @@ import { Textarea } from '@/components/ui/textarea'
 import { deleteCompany, editCompany } from '@/services/companies'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from '@/components/ui/use-toast'
-import { DragDropComponent, DragDropContent, DragDropFileInfo, DragDropImagePreview } from '../drag-drop'
+import {
+    DragDropComponent,
+    DragDropContent,
+    DragDropFileInfo,
+    DragDropImagePreview
+} from '@/components/forms/drag-drop'
 
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 
