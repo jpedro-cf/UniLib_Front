@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const CompanyMemberCard = ({ member }: Props) => {
-    const { mutate, isPending } = useRemoveCompanyMember(member.id)
+    const { mutate, isPending } = useRemoveCompanyMember()
     return (
         <div className="p-5 rounded-md bg-[#fff] border flex items-start justify-between gap-5">
             <Avatar className="hover:cursor-pointer">

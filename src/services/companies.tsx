@@ -57,7 +57,7 @@ export const useCompanyMembers = (id: string) => {
     return result
 }
 
-export const useRemoveCompanyMember = (member_id: string) => {
+export const useRemoveCompanyMember = () => {
     const submit = async (member_id: string): Promise<void> => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         return
