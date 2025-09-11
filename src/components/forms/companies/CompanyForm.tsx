@@ -6,7 +6,7 @@ import { Form, FormField, FormItem, FormLabel, FormMessage } from '@/components/
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { editCompany } from '@/services/companies'
+import { deleteCompany, editCompany } from '@/services/companies'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from '@/components/ui/use-toast'
 import { DragDropComponent, DragDropContent, DragDropFileInfo, DragDropImagePreview } from '../drag-drop'
@@ -70,6 +70,25 @@ export const CompanyForm = ({ company }: Props) => {
         }
     })
 
+    const deleteMutation = useMutation({
+        mutationFn: () => deleteCompany(company!.id!),
+        onSuccess: () => {
+            toast({
+                title: 'Deletado!',
+                variant: 'default',
+                description: <div>Empresa deletada com sucesso.</div>
+            })
+            window.location.reload()
+        },
+        onError: () => {
+            toast({
+                title: 'Erro!',
+                variant: 'destructive',
+                description: <div>Ocorreu um erro ao deletar a empresa.</div>
+            })
+        }
+    })
+
     const createMutation = useMutation({
         mutationFn: editCompany,
         onSuccess: () => {
@@ -102,6 +121,7 @@ export const CompanyForm = ({ company }: Props) => {
         form.setValue('image', file, { shouldValidate: true })
     }
 
+    const pending = editMutation.isPending || createMutation.isPending || deleteMutation.isPending
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-5 w-full bg-[#fff] p-8 rounded-md border">
@@ -146,9 +166,21 @@ export const CompanyForm = ({ company }: Props) => {
                             </FormItem>
                         )}
                     />
-                    <Button disabled={editMutation.isPending || createMutation.isPending} type="submit">
-                        Salvar
-                    </Button>
+                    <div className="flex items-center gap-2">
+                        <Button disabled={pending} type="submit">
+                            Salvar
+                        </Button>
+                        {company && (
+                            <Button
+                                disabled={pending}
+                                type="button"
+                                variant={'destructive'}
+                                onClick={() => deleteMutation.mutate()}
+                            >
+                                Deletar
+                            </Button>
+                        )}
+                    </div>
                 </div>
             </form>
         </Form>

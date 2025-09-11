@@ -59,6 +59,12 @@ export const editCompany = async (data: z.infer<typeof CompanyFormSchema>) => {
     return res.data
 }
 
+export const deleteCompany = async (id: string) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    const res = await axios.delete(`${env.base_url}/companies/${id}`)
+    return res.data
+}
+
 export const createCompany = async (data: Partial<z.infer<typeof CompanyFormSchema>>) => {
     console.log(data)
     await new Promise((resolve) => setTimeout(resolve, 1000))
