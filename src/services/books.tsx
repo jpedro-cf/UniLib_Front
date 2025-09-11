@@ -12,7 +12,8 @@ export const useBooks = () => {
 
     const results = useQuery({
         queryKey: ['books'],
-        queryFn: submit
+        queryFn: submit,
+        refetchOnWindowFocus: false
     })
 
     return results
@@ -27,7 +28,8 @@ export const useBook = (id: IBook['id']) => {
     const result = useQuery({
         queryKey: ['book'],
         queryFn: submit,
-        retry: false
+        retry: false,
+        refetchOnWindowFocus: false
     })
 
     return result
@@ -43,7 +45,8 @@ export const useReader = (id: string) => {
     const result = useQuery({
         queryKey: ['read_book'],
         queryFn: submit,
-        retry: false
+        retry: false,
+        refetchOnWindowFocus: false
     })
 
     return result

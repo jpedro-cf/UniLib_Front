@@ -1,4 +1,4 @@
-import { EditCompanyForm } from '@/components/forms/companies/EditCompanyForm'
+import { CompanyForm } from '@/components/forms/companies/CompanyForm'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { UserCard } from '@/components/users/Card'
 import { useAuth } from '@/context/auth-context'
@@ -14,28 +14,32 @@ export const CompanyPage = () => {
     const auth = useAuth()
     const navigate = useNavigate()
 
-    if (!auth.user || !auth.companies || !id) {
+    if (!auth.user || !auth.user.memberships || !id) {
         navigate('/', { replace: true })
     }
 
-    if (!auth.companies?.some((c) => c.id == id)) {
+    if (!auth.user?.memberships?.some((m) => m.company.id == id)) {
         navigate('/', { replace: true })
     }
 
-    const company = useCompany(id!)
+    const { data: company, isLoading, isRefetching, isError, refetch } = useCompany(id!)
     const users = useUsers()
 
     useEffect(() => {
-        company.refetch()
+        refetch()
     }, [id])
 
-    if (company.isLoading || company.isRefetching) {
+    if (isLoading || isRefetching) {
         return 'Loading...'
+    }
+
+    if (isError) {
+        return <div>Ocorreu um erro inesperado.</div>
     }
 
     return (
         <div className="m-5">
-            <h2 className="text-xl font-semibold mb-3">{company.data.name}</h2>
+            <h2 className="text-xl font-semibold mb-3">{company!.name}</h2>
             <Tabs defaultValue="details" className="w-full">
                 <TabsList>
                     <TabsTrigger value="details">Detalhes</TabsTrigger>
@@ -44,7 +48,7 @@ export const CompanyPage = () => {
                     <TabsTrigger value="borrowed">Livros Emprestados</TabsTrigger>
                 </TabsList>
                 <TabsContent value="details">
-                    <EditCompanyForm company={company.data} />
+                    <CompanyForm company={company} />
                     {!users.isLoading && !users.isError && (
                         <div className="mt-5">
                             <h2 className="text-lg font-semibold mb-3">Equipe</h2>

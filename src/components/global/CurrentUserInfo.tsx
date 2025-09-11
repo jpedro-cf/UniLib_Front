@@ -49,16 +49,16 @@ export function CurrentUserInfo() {
                         </NavLink>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
-                {auth.companies && (
+                {auth.user.memberships && (
                     <>
                         <DropdownMenuSeparator />
                         <DropdownMenuLabel className="cursor-default">Empresas</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            {auth.companies.map((company) => (
+                            {auth.user.memberships.map((membership) => (
                                 <DropdownMenuItem>
-                                    <NavLink to={`/admin/empresas/${company.id}`} className={'w-full'}>
-                                        {company.name}
+                                    <NavLink to={`/admin/empresas/${membership.company.id}`} className={'w-full'}>
+                                        {membership.company.name}
                                     </NavLink>
                                 </DropdownMenuItem>
                             ))}

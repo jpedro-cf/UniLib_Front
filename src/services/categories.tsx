@@ -10,7 +10,8 @@ export const useCategories = () => {
 
     const results = useQuery({
         queryKey: ['categories'],
-        queryFn: submit
+        queryFn: submit,
+        refetchOnWindowFocus: false
     })
 
     return results

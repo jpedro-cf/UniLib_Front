@@ -1,49 +1,65 @@
-import { EditCompanyFormSchema } from '@/components/forms/companies/EditCompanyForm'
+import { CompanyFormSchema } from '@/components/forms/companies/CompanyForm'
 import { env } from '@/config/env'
+import { ICompany, ICompanyMember } from '@/interfaces/Company'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { z } from 'zod'
 
-export const useCompanies = () => {
-    const submit = async () => {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        const res = await axios.get(`${env.base_url}/companies`)
-        return res.data
+const mockCompany = (id?: string): ICompany => {
+    return {
+        id: id ?? '123',
+        description: 'description',
+        image: '/public/images/logos/logo1.svg',
+        name: 'Empresa',
+        createdAt: new Date()
     }
-
-    const results = useQuery({
-        queryKey: ['companies'],
-        queryFn: submit
-    })
-
-    return results
 }
 
 export const useCompany = (id: string) => {
-    const submit = async () => {
+    const submit = async (): Promise<ICompany> => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
-        const res = await axios.get(`${env.base_url}/companies/${id}`)
-        return res.data
+
+        return mockCompany(id)
     }
 
     const result = useQuery({
         queryKey: ['company'],
         queryFn: submit,
-        retry: false
+        retry: false,
+        refetchOnWindowFocus: false
     })
 
     return result
 }
 
-export const editCompany = async (data: z.infer<typeof EditCompanyFormSchema>) => {
-    // Função que faz a chamada para atualizar os dados
+export const useCompanyMembers = (id: string) => {
+    const submit = async (): Promise<ICompanyMember[]> => {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        return []
+    }
 
+    const result = useQuery({
+        queryKey: ['company'],
+        queryFn: submit,
+        retry: false,
+        refetchOnWindowFocus: false
+    })
+
+    return result
+}
+
+export const editCompany = async (data: z.infer<typeof CompanyFormSchema>) => {
     const values = {
         name: data.name,
         description: data.description,
         image: data.image
     }
-    await new Promise((resolve) => setTimeout(resolve, 1000)) // Simulação de atraso, remova se não for necessário
+    await new Promise((resolve) => setTimeout(resolve, 1000))
     const res = await axios.put(`${env.base_url}/companies/${data.id}`, values)
     return res.data
+}
+
+export const createCompany = async (data: Partial<z.infer<typeof CompanyFormSchema>>) => {
+    console.log(data)
+    await new Promise((resolve) => setTimeout(resolve, 1000))
 }

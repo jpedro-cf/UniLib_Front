@@ -5,9 +5,9 @@ type Props = PropsWithChildren
 
 export const Layout = ({ children }: Props) => {
     return (
-        <div className="flex">
+        <div className="flex h-screen">
             <Sidebar />
-            <main className=" w-full min-h-screen bg-slate-50 p-5">{children}</main>
+            <main className="flex-1 overflow-auto bg-slate-50 p-5">{children}</main>
         </div>
     )
 }
