@@ -3,7 +3,7 @@ import { IBook, IReadBookResponse } from '@/interfaces/Book'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 
-export const useBooks = () => {
+export const useBooks = (id?: string) => {
     const submit = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         const res = await axios.get(`${env.base_url}/books`)

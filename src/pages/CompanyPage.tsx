@@ -1,3 +1,4 @@
+import { CompanyBooks } from '@/components/companies/CompanyBooks'
 import { CompanyForm } from '@/components/forms/companies/CompanyForm'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { UserCard } from '@/components/users/Card'
@@ -30,16 +31,16 @@ export const CompanyPage = () => {
     }, [id])
 
     if (isLoading || isRefetching) {
-        return 'Loading...'
+        return <div>Loading...</div>
     }
 
-    if (isError) {
+    if (isError || !company) {
         return <div>Ocorreu um erro inesperado.</div>
     }
 
     return (
         <div className="m-5">
-            <h2 className="text-xl font-semibold mb-3">{company!.name}</h2>
+            <h2 className="text-xl font-semibold mb-3">{company.name}</h2>
             <Tabs defaultValue="details" className="w-full">
                 <TabsList>
                     <TabsTrigger value="details">Detalhes</TabsTrigger>
@@ -60,7 +61,9 @@ export const CompanyPage = () => {
                         </div>
                     )}
                 </TabsContent>
-                <TabsContent value="books">Livros</TabsContent>
+                <TabsContent value="books">
+                    <CompanyBooks id={company.id} />
+                </TabsContent>
                 <TabsContent value="groups">Turmas</TabsContent>
                 <TabsContent value="borrowed">Livros Emprestados</TabsContent>
             </Tabs>
