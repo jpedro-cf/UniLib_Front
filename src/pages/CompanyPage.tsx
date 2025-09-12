@@ -6,6 +6,7 @@ import { useAuth } from '@/context/auth-context'
 import { useCompany } from '@/services/companies'
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { BorrowedBooks } from '@/components/books/BorrowedBooks'
 
 export const CompanyPage = () => {
     const { id } = useParams()
@@ -53,7 +54,9 @@ export const CompanyPage = () => {
                     <CompanyBooks id={company.id} />
                 </TabsContent>
                 <TabsContent value="groups">Turmas</TabsContent>
-                <TabsContent value="borrowed">Livros Emprestados</TabsContent>
+                <TabsContent value="borrowed">
+                    <BorrowedBooks company_id={company.id} />
+                </TabsContent>
             </Tabs>
         </div>
     )

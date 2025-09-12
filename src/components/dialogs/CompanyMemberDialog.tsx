@@ -8,15 +8,13 @@ interface Props extends React.PropsWithChildren {
 export function CompanyMemberDialog({ children, company_id }: Props) {
     return (
         <Dialog>
-            <form>
-                <DialogTrigger asChild>{children}</DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                        <DialogTitle>Membro da Empresa</DialogTitle>
-                    </DialogHeader>
-                    <CompanyMemberForm company_id={company_id} />
-                </DialogContent>
-            </form>
+            <DialogTrigger asChild>{children}</DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                    <DialogTitle>Membro da Empresa</DialogTitle>
+                </DialogHeader>
+                <CompanyMemberForm company_id={company_id} />
+            </DialogContent>
         </Dialog>
     )
 }

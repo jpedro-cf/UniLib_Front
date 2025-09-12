@@ -2,7 +2,7 @@ import { ICompany } from '@/interfaces/Company'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Form, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -17,10 +17,6 @@ import {
 } from '@/components/forms/drag-drop'
 
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
-
-interface Props {
-    company?: ICompany
-}
 
 export const CompanyFormSchema = z
     .object({
@@ -46,14 +42,13 @@ export const CompanyFormSchema = z
         }
     })
 
+interface Props {
+    company?: ICompany
+}
+
 export const CompanyForm = ({ company }: Props) => {
     const form = useForm<z.infer<typeof CompanyFormSchema>>({
-        resolver: zodResolver(CompanyFormSchema),
-        defaultValues: {
-            id: company?.id,
-            name: company?.name,
-            description: company?.description
-        }
+        resolver: zodResolver(CompanyFormSchema)
     })
 
     const editMutation = useMutation({
@@ -130,7 +125,6 @@ export const CompanyForm = ({ company }: Props) => {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-5 w-full bg-[#fff] p-8 rounded-md border">
-                {/* Fazer a imagem como um input type file */}
                 <FormField
                     control={form.control}
                     name="image"
@@ -156,7 +150,6 @@ export const CompanyForm = ({ company }: Props) => {
                             <FormItem>
                                 <FormLabel>Nome:</FormLabel>
                                 <Input placeholder="Nome" {...field} />
-                                <FormMessage />
                             </FormItem>
                         )}
                     />
@@ -167,7 +160,6 @@ export const CompanyForm = ({ company }: Props) => {
                             <FormItem>
                                 <FormLabel>Descrição:</FormLabel>
                                 <Textarea rows={6} placeholder="Descrição" {...field} />
-                                <FormMessage />
                             </FormItem>
                         )}
                     />
