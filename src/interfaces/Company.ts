@@ -1,5 +1,3 @@
-import { IUser } from './User'
-
 export interface ICompany {
     id: string
     name: string
@@ -12,7 +10,8 @@ export type CompanyRole = 'OWNER' | 'ADMIN' | 'MANAGER'
 
 export interface ICompanyMember {
     id: string
-    user: Partial<IUser>
-    company: Partial<ICompany>
+    name: string
+    email: string
+    company_id: string
     role: CompanyRole
 }

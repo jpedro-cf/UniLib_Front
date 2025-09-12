@@ -41,10 +41,11 @@ export const useCompanyMembers = (id: string) => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         return [
             {
-                company: mockCompany(id),
+                company_id: id,
                 id: '123',
                 role: 'OWNER',
-                user: mockUser()
+                name: 'nome',
+                email: 'email@email.com'
             }
         ]
     }
