@@ -3,6 +3,7 @@ import { BookText, List } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import logo from '../../../public/images/logo-ipsum.svg'
 import { CurrentUserInfo } from './CurrentUserInfo'
+import { useAuth } from '@/context/auth-context'
 
 const linksProperties = cva('flex items-center gap-2 font-semibold py-1 px-3 rounded-sm', {
     variants: {
@@ -22,6 +23,7 @@ const linksProperties = cva('flex items-center gap-2 font-semibold py-1 px-3 rou
 })
 
 export const Sidebar = () => {
+    const { user } = useAuth()
     return (
         <aside className="sidebar hidden lg:flex flex-col bg-[#fff] p-5 w-[225px] overflow-hidden h-full border-r border-blue-100/80">
             <nav>
@@ -38,6 +40,19 @@ export const Sidebar = () => {
                             Livros
                         </NavLink>
                     </li>
+                    {user && (
+                        <li>
+                            <NavLink
+                                to="/meus-livros"
+                                className={({ isActive, isPending }) =>
+                                    linksProperties({ active: isActive, pending: isPending })
+                                }
+                            >
+                                <BookText size={20} />
+                                Meus Livros
+                            </NavLink>
+                        </li>
+                    )}
                     <li>
                         <NavLink
                             to="/categorias"

@@ -6,6 +6,7 @@ import { BookPage } from './pages/BookPage'
 import { CompanyPage } from './pages/CompanyPage'
 import { Reader } from './pages/Reader'
 import { PersistAuth } from './components/global/PersistAuth'
+import { MyBooksPage } from './pages/MyBooksPage'
 
 function App() {
     return (
@@ -34,6 +35,14 @@ function App() {
                         element={
                             <Layout>
                                 <BookPage />
+                            </Layout>
+                        }
+                    />
+                    <Route
+                        path="/meus-livros"
+                        element={
+                            <Layout>
+                                <MyBooksPage />
                             </Layout>
                         }
                     />

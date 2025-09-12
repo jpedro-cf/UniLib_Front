@@ -1,9 +1,10 @@
 import { BookFormSchema } from '@/components/book/BookForm'
 import { toast } from '@/components/ui/use-toast'
 import { env } from '@/config/env'
-import { IBook, IReadBookResponse } from '@/interfaces/Book'
+import { IBook, IBorrowedBook, IReadBookResponse } from '@/interfaces/Book'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import axios from 'axios'
+import { mockUser } from './users'
 
 export const mockBook = (): IBook => {
     return {
@@ -40,7 +41,7 @@ export const mockBook = (): IBook => {
 }
 
 export const useBooks = (id?: string) => {
-    const submit = async () => {
+    const submit = async (): Promise<IBook[]> => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         const res = await axios.get(`${env.base_url}/books`)
         return res.data
@@ -54,6 +55,30 @@ export const useBooks = (id?: string) => {
 
     return results
 }
+
+export const useBorrowedBooks = (enabled: boolean) => {
+    const submit = async (): Promise<IBorrowedBook[]> => {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        return [
+            {
+                book: mockBook(),
+                user: mockUser(),
+                status: 'IN_PROGRESS',
+                id: '123',
+                expires_at: new Date(),
+                release_at: new Date()
+            }
+        ]
+    }
+
+    return useQuery({
+        queryKey: ['borrows'],
+        queryFn: submit,
+        enabled,
+        refetchOnWindowFocus: false
+    })
+}
+
 export const useBook = (id: IBook['id']) => {
     const submit = async () => {
         await new Promise((resolve) => setTimeout(resolve, 1000))

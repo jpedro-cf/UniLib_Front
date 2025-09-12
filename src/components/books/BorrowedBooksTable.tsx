@@ -14,7 +14,7 @@ interface Props {
 export function BorrowedBooksTable({ items, admin }: Props) {
     return (
         <Table>
-            <TableCaption>Todos os livros emprestados.</TableCaption>
+            <TableCaption>Esses são todos os livros.</TableCaption>
             <TableHeader>
                 <TableRow>
                     <TableHead>Livro</TableHead>
@@ -51,7 +51,7 @@ export function BorrowedBooksTable({ items, admin }: Props) {
                                 </DropdownMenu>
                             ) : (
                                 <NavLink to={`/${item.book.id}/reader`}>
-                                    <Button variant={'blue'} size={'sm'}>
+                                    <Button variant={'blue'} size={'sm'} disabled={item.status != 'IN_PROGRESS'}>
                                         Ler livro
                                     </Button>
                                 </NavLink>
