@@ -5,6 +5,7 @@ import { Button } from '../ui/button'
 import { Settings } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { BorrowedBookStatus } from './BorrowdBookStatus'
+import { BorrowAction, useBorrowedBookMutation } from '@/services/books'
 
 interface Props {
     admin: boolean
@@ -64,15 +65,25 @@ export function BorrowedBooksTable({ items, admin }: Props) {
 }
 
 function AdminActions({ item }: { item: IBorrowedBook }) {
+    const approve = { borrow_id: item.id, action: BorrowAction.APPROVE }
+    const deny = { borrow_id: item.id, action: BorrowAction.DENY }
+
+    const { mutate, isPending } = useBorrowedBookMutation()
+
     return (
         <>
             <DropdownMenuItem>
-                <button className="w-full text-start" type="button">
+                <button
+                    disabled={isPending}
+                    className="w-full text-start"
+                    type="button"
+                    onClick={() => mutate(approve)}
+                >
                     Aceitar
                 </button>
             </DropdownMenuItem>
             <DropdownMenuItem>
-                <button className="w-full text-start" type="button">
+                <button disabled={isPending} className="w-full text-start" type="button" onClick={() => mutate(deny)}>
                     Negar
                 </button>
             </DropdownMenuItem>

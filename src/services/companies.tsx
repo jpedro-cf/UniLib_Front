@@ -127,6 +127,5 @@ export const deleteCompany = async (id: string) => {
 }
 
 export const createCompany = async (data: Partial<z.infer<typeof CompanyFormSchema>>) => {
-    console.log(data)
     await new Promise((resolve) => setTimeout(resolve, 1000))
 }

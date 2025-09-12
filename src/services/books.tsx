@@ -1,6 +1,7 @@
+import { toast } from '@/components/ui/use-toast'
 import { env } from '@/config/env'
 import { IBook, IReadBookResponse } from '@/interfaces/Book'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 
 export const mockBook = (): IBook => {
@@ -84,4 +85,48 @@ export const useReader = (id: string) => {
     })
 
     return result
+}
+
+export enum BorrowAction {
+    APPROVE,
+    DENY
+}
+
+interface BorrowedBookRequest {
+    borrow_id: string
+    action: BorrowAction
+}
+
+export const useBorrowedBookMutation = () => {
+    const approve = async (data: BorrowedBookRequest): Promise<void> => {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        return
+    }
+
+    const deny = async (data: BorrowedBookRequest): Promise<void> => {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        return
+    }
+
+    const submit = async (data: BorrowedBookRequest) => {
+        return data.action == BorrowAction.APPROVE ? approve(data) : deny(data)
+    }
+
+    return useMutation({
+        mutationFn: submit,
+        onSuccess: () => {
+            toast({
+                title: 'Sucesso!',
+                variant: 'default',
+                description: <div>Ação realizada com sucesso.</div>
+            })
+        },
+        onError: () => {
+            toast({
+                title: 'Erro!',
+                variant: 'destructive',
+                description: <div>Ocorreu um erro ao realizar essa ação.</div>
+            })
+        }
+    })
 }
