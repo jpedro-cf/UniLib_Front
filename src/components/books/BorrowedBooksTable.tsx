@@ -4,7 +4,7 @@ import { IBorrowedBook } from '@/interfaces/Book'
 import { Button } from '../ui/button'
 import { Settings } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
-import { BorrowedBookStatus } from './BorrowdBookStatus'
+import { BorrowedBookStatus } from './BorrowedBookStatus'
 import { BorrowAction, useBorrowedBookMutation } from '@/services/books'
 
 interface Props {
