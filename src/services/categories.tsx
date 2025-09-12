@@ -1,8 +1,9 @@
 import { env } from '@/config/env'
+import { ICategory } from '@/interfaces/Category'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 export const useCategories = () => {
-    const submit = async () => {
+    const submit = async (): Promise<ICategory[]> => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         const res = await axios.get(`${env.base_url}/categories`)
         return res.data

@@ -1,3 +1,4 @@
+import { BookFormSchema } from '@/components/book/BookForm'
 import { toast } from '@/components/ui/use-toast'
 import { env } from '@/config/env'
 import { IBook, IReadBookResponse } from '@/interfaces/Book'
@@ -85,6 +86,50 @@ export const useReader = (id: string) => {
     })
 
     return result
+}
+
+export const useBookMutation = () => {
+    const submit = async (data: BookFormSchema): Promise<IBook> => {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+
+        const formdata = new FormData()
+
+        formdata.append('companyId', data.company_id)
+        formdata.append('title', data.title)
+        formdata.append('description', data.description)
+
+        if (data.image) {
+            formdata.append('image', data.image, data.image.name)
+        }
+        if (data.pdf) {
+            formdata.append('pdf', data.pdf, data.pdf.name)
+        }
+        if (data.categories) {
+            data.categories.map((category) => {
+                formdata.append('categories[]', category.value)
+            })
+        }
+
+        return mockBook()
+    }
+
+    return useMutation({
+        mutationFn: submit,
+        onSuccess: () => {
+            toast({
+                title: 'Sucesso!',
+                variant: 'default',
+                description: <div>Livro publicado com sucesso.</div>
+            })
+        },
+        onError: () => {
+            toast({
+                title: 'Erro!',
+                variant: 'destructive',
+                description: <div>Ocorreu um erro ao publicar o livro.</div>
+            })
+        }
+    })
 }
 
 export enum BorrowAction {

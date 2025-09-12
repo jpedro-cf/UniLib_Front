@@ -48,7 +48,12 @@ interface Props {
 
 export const CompanyForm = ({ company }: Props) => {
     const form = useForm<z.infer<typeof CompanyFormSchema>>({
-        resolver: zodResolver(CompanyFormSchema)
+        resolver: zodResolver(CompanyFormSchema),
+        defaultValues: {
+            id: company?.id,
+            name: company?.name,
+            description: company?.description
+        }
     })
 
     const editMutation = useMutation({
