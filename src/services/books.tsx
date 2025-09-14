@@ -5,6 +5,7 @@ import { IBook, IBorrowedBook, IReadBookResponse } from '@/interfaces/Book'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { mockUser } from './users'
+import { PaginationResponse } from '@/interfaces'
 
 export const mockBook = (): IBook => {
     return {
@@ -41,10 +42,15 @@ export const mockBook = (): IBook => {
 }
 
 export const useBooks = (id?: string) => {
-    const submit = async (): Promise<IBook[]> => {
+    const submit = async (): Promise<PaginationResponse<IBook>> => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
-        const res = await axios.get(`${env.base_url}/books`)
-        return res.data
+
+        return {
+            content: [mockBook()],
+            last: true,
+            totalElements: 1,
+            totalPages: 1
+        }
     }
 
     const results = useQuery({
@@ -57,18 +63,23 @@ export const useBooks = (id?: string) => {
 }
 
 export const useBorrowedBooks = (enabled: boolean) => {
-    const submit = async (): Promise<IBorrowedBook[]> => {
+    const submit = async (): Promise<PaginationResponse<IBorrowedBook>> => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
-        return [
-            {
-                book: mockBook(),
-                user: mockUser(),
-                status: 'IN_PROGRESS',
-                id: '123',
-                expires_at: new Date(),
-                release_at: new Date()
-            }
-        ]
+        return {
+            content: [
+                {
+                    book: mockBook(),
+                    user: mockUser(),
+                    status: 'IN_PROGRESS',
+                    id: '123',
+                    expires_at: new Date(),
+                    release_at: new Date()
+                }
+            ],
+            last: true,
+            totalElements: 1,
+            totalPages: 1
+        }
     }
 
     return useQuery({

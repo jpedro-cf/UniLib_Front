@@ -8,6 +8,7 @@ import { mockUser } from './users'
 import { toast } from '@/components/ui/use-toast'
 import { IBorrowedBook } from '@/interfaces/Book'
 import { mockBook } from './books'
+import { PaginationResponse } from '@/interfaces'
 
 const mockCompany = (id?: string): ICompany => {
     return {
@@ -88,18 +89,23 @@ export const useRemoveCompanyMember = () => {
 }
 
 export const useCompanyBorrowedBooks = (company_id: string) => {
-    const submit = async (): Promise<IBorrowedBook[]> => {
+    const submit = async (): Promise<PaginationResponse<IBorrowedBook>> => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
-        return [
-            {
-                book: mockBook(),
-                user: mockUser(),
-                status: 'WAITING',
-                id: '123',
-                expires_at: new Date(),
-                release_at: new Date()
-            }
-        ]
+        return {
+            content: [
+                {
+                    book: mockBook(),
+                    user: mockUser(),
+                    status: 'IN_PROGRESS',
+                    id: '123',
+                    expires_at: new Date(),
+                    release_at: new Date()
+                }
+            ],
+            last: true,
+            totalElements: 1,
+            totalPages: 1
+        }
     }
 
     return useQuery({
