@@ -17,7 +17,16 @@ export function CurrentUserInfo() {
     const auth = useAuth()
 
     if (!auth.user) {
-        return <></>
+        return (
+            <div className="flex gap-3">
+                <NavLink to={'/login'}>
+                    <Button variant={'blue'}>Entrar</Button>
+                </NavLink>
+                <NavLink to={'/criar-conta'}>
+                    <Button>Criar conta</Button>
+                </NavLink>
+            </div>
+        )
     }
 
     return (

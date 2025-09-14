@@ -1,6 +1,8 @@
+import { CategoryFormSchema } from '@/components/categories/CategoryForm'
+import { toast } from '@/components/ui/use-toast'
 import { env } from '@/config/env'
 import { ICategory } from '@/interfaces/Category'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 export const useCategories = () => {
     const submit = async (): Promise<ICategory[]> => {
@@ -16,4 +18,28 @@ export const useCategories = () => {
     })
 
     return results
+}
+
+export function useCategoryMutation() {
+    const submit = async (data: CategoryFormSchema) => {
+        return
+    }
+
+    return useMutation({
+        mutationFn: submit,
+        onSuccess: () => {
+            toast({
+                title: 'Sucesso!',
+                variant: 'default',
+                description: <div>Categoria publicada com sucesso.</div>
+            })
+        },
+        onError: () => {
+            toast({
+                title: 'Erro!',
+                variant: 'destructive',
+                description: <div>Ocorreu um erro ao publicar a categoria.</div>
+            })
+        }
+    })
 }
