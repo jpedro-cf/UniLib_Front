@@ -131,8 +131,8 @@ export const BookPage = () => {
                     </div>
                     <Reviews reviews={book.data.reviews} />
                     {/* Mudar isso depois, colocar um isLoading... */}
-                    <RelatedBooks tituloSecao="Livros da mesma empresa" books={books.data} />
-                    <RelatedBooks tituloSecao="Livros da mesma categoria" books={books.data} />
+                    <RelatedBooks tituloSecao="Livros da mesma empresa" books={books.data?.content ?? []} />
+                    <RelatedBooks tituloSecao="Livros da mesma categoria" books={books.data?.content ?? []} />
                 </>
             )}
         </>

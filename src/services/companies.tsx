@@ -117,22 +117,33 @@ export const useCompanyBorrowedBooks = (company_id: string) => {
 }
 
 export const editCompany = async (data: z.infer<typeof CompanyFormSchema>) => {
-    const values = {
-        name: data.name,
-        description: data.description,
-        image: data.image
+    const formData = new FormData()
+
+    formData.append('id', data.id!)
+    formData.append('name', data.name)
+    formData.append('description', data.description)
+
+    if (data.image) {
+        formData.append('image', data.image, data.image.name)
     }
+
     await new Promise((resolve) => setTimeout(resolve, 1000))
-    const res = await axios.put(`${env.base_url}/companies/${data.id}`, values)
-    return res.data
+
+    return mockCompany()
 }
 
 export const deleteCompany = async (id: string) => {
     await new Promise((resolve) => setTimeout(resolve, 1000))
-    const res = await axios.delete(`${env.base_url}/companies/${id}`)
-    return res.data
+    return
 }
 
-export const createCompany = async (data: Partial<z.infer<typeof CompanyFormSchema>>) => {
+export const createCompany = async (data: z.infer<typeof CompanyFormSchema>) => {
     await new Promise((resolve) => setTimeout(resolve, 1000))
+    const formData = new FormData()
+
+    formData.append('name', data.name)
+    formData.append('description', data.description)
+    formData.append('image', data.image!, data.image!.name)
+
+    return mockCompany()
 }

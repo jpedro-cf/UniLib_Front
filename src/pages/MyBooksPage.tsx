@@ -16,5 +16,5 @@ export function MyBooksPage() {
         return <>Carregando...</>
     }
 
-    return <BorrowedBooksTable items={data ?? []} admin={false} />
+    return <BorrowedBooksTable items={data?.content ?? []} admin={false} />
 }

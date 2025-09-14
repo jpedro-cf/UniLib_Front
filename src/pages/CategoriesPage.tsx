@@ -7,7 +7,7 @@ import { ICategory } from '@/interfaces/Category'
 import { useCategories } from '@/services/categories'
 
 export const CategoriesPage = () => {
-    const categories = useCategories()
+    const { data, isLoading, isError, isSuccess } = useCategories()
     const { user } = useAuth()
 
     const canCreateCategory = user?.memberships.some((m) => m.role == 'ADMIN' || m.role == 'OWNER')
@@ -23,7 +23,7 @@ export const CategoriesPage = () => {
                 </CategoryDialog>
             )}
 
-            {(categories.isLoading || categories.isError) && (
+            {(isLoading || isError) && (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-9">
                     {Array.from({ length: 6 }, (_, i) => i + 1).map((item) => (
                         <SkeletonCard key={item} />
@@ -31,9 +31,9 @@ export const CategoriesPage = () => {
                 </div>
             )}
 
-            {categories.isSuccess && categories.data?.length > 0 && (
+            {isSuccess && data?.content.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-9">
-                    {categories.data.map((category: ICategory) => (
+                    {data.content.map((category: ICategory) => (
                         <CategoriesCard category={category} key={category.id} />
                     ))}
                 </div>

@@ -110,8 +110,10 @@ export const useBook = (id: IBook['id']) => {
 export const useReader = (id: string) => {
     const submit = async (): Promise<IReadBookResponse> => {
         await new Promise((resolve) => setTimeout(resolve, 1000))
-        const res = await axios.get(`${env.base_url}/books/${id}/read`)
-        return res.data
+        return {
+            book: mockBook(),
+            url: '/public/documents/livro.pdf'
+        }
     }
 
     const result = useQuery({

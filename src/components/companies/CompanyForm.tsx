@@ -116,6 +116,8 @@ export const CompanyForm = ({ company }: Props) => {
     function onSubmit(values: z.infer<typeof CompanyFormSchema>) {
         if (values.id) {
             editMutation.mutate(values)
+        } else {
+            createMutation.mutate(values)
         }
     }
 

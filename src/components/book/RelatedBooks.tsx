@@ -8,6 +8,9 @@ interface Props {
 }
 
 export const RelatedBooks = ({ books, tituloSecao }: Props) => {
+    if (!books) {
+        return <></>
+    }
     return (
         <div className="bg-white p-8 rounded-lg shadow-md mt-4">
             <div className="flex justify-between mb-4">
