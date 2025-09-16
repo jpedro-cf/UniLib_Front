@@ -118,7 +118,6 @@ export const BookPage = () => {
                     <Reviews reviews={book.data.reviews} />
                     {/* Mudar isso depois, colocar um isLoading... */}
                     <RelatedBooks tituloSecao="Livros da mesma empresa" books={books.data?.content ?? []} />
-                    <RelatedBooks tituloSecao="Livros da mesma categoria" books={books.data?.content ?? []} />
                 </>
             )}
         </>
