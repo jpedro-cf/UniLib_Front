@@ -7,6 +7,8 @@ import { CompanyPage } from './pages/CompanyPage'
 import { Reader } from './pages/Reader'
 import { PersistAuth } from './components/global/PersistAuth'
 import { MyBooksPage } from './pages/MyBooksPage'
+import { LoginPage } from './pages/LoginPage'
+import { RegisterPage } from './pages/RegisterPage'
 
 function App() {
     return (
@@ -21,6 +23,8 @@ function App() {
                             </Layout>
                         }
                     />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/criar-conta" element={<RegisterPage />} />
                     <Route
                         path="/categorias"
                         element={
