@@ -171,7 +171,7 @@ export function BookForm({ book }: Props) {
                                     value={field.value}
                                     onChange={field.onChange}
                                     options={
-                                        categories?.map((category) => ({
+                                        categories?.content?.map((category) => ({
                                             value: category.id,
                                             label: category.title
                                         })) ?? []
