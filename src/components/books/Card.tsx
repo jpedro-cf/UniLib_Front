@@ -39,20 +39,6 @@ export const BooksCard = ({ book }: Props) => {
                     <Button variant={'blue'} size={'sm'} onClick={() => handleClick(book.id)}>
                         Ver mais <PlusCircle size={16} className="ms-2" />{' '}
                     </Button>
-                    <Button
-                        variant={'outline'}
-                        size={'sm'}
-                        className="text-destructive hover:text-slate-100 hover:border-destructive hover:bg-destructive"
-                        onClick={() =>
-                            toast({
-                                variant: 'default',
-                                title: 'Favoritado!',
-                                description: 'Livro favoritado com sucesso.'
-                            })
-                        }
-                    >
-                        <HeartIcon size={16} />
-                    </Button>
                 </div>
             </div>
         </div>

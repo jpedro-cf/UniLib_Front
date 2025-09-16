@@ -111,20 +111,6 @@ export const BookPage = () => {
                                 >
                                     Obter livro <ShoppingBag size={16} className="ms-3" />
                                 </Button>
-                                <Button
-                                    variant={'outline'}
-                                    size={'lg'}
-                                    className="text-destructive hover:text-slate-100 hover:border-destructive  hover:bg-destructive w-auto"
-                                    onClick={() =>
-                                        toast({
-                                            variant: 'default',
-                                            title: 'Favoritado!',
-                                            description: 'Livro favoritado com sucesso.'
-                                        })
-                                    }
-                                >
-                                    Favoritar <Heart size={16} className="ms-3" />
-                                </Button>
                             </div>
                             <CompanyInfo />
                         </div>
