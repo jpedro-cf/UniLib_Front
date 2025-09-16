@@ -50,7 +50,7 @@ export function BorrowedBooksTable({ items, admin }: Props) {
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             ) : (
-                                <NavLink to={`/${item.book.id}/reader`}>
+                                <NavLink to={`/livro/${item.book.id}/reader`}>
                                     <Button variant={'blue'} size={'sm'} disabled={item.status != 'IN_PROGRESS'}>
                                         Ler livro
                                     </Button>
