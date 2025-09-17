@@ -11,6 +11,12 @@ interface Props {
 
 export const CompanyMemberCard = ({ member }: Props) => {
     const { mutate, isPending } = useRemoveCompanyMember()
+    function handleClick() {
+        mutate({
+            company_id: member.company_id,
+            member_id: member.id
+        })
+    }
     return (
         <div className="p-5 rounded-md bg-[#fff] border flex items-start justify-between gap-5">
             <Avatar className="hover:cursor-pointer">
@@ -22,13 +28,7 @@ export const CompanyMemberCard = ({ member }: Props) => {
             </div>
             <div className="flex gap-2 items-center">
                 <Badge className="p-1">{member.role}</Badge>
-                <Button
-                    type="button"
-                    variant={'destructive'}
-                    size={'sm'}
-                    onClick={() => mutate(member.id)}
-                    disabled={isPending}
-                >
+                <Button type="button" variant={'destructive'} size={'sm'} onClick={handleClick} disabled={isPending}>
                     <Trash size={16} />
                 </Button>
             </div>

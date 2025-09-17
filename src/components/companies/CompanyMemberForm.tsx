@@ -26,9 +26,7 @@ export function CompanyMemberForm({ company_id, member }: Props) {
             role: member?.role
         }
     })
-    function onSubmit(values: z.infer<typeof CompanyMemberFormSchema>) {
-        console.log(values)
-    }
+    function onSubmit(values: z.infer<typeof CompanyMemberFormSchema>) {}
 
     const { data } = useUsers()
 

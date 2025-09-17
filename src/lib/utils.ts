@@ -25,3 +25,13 @@ export async function urlToFile(url: string): Promise<File> {
 
     return new File([blob], filename, { type: blob.type })
 }
+
+export function calculateMean(numbers: number[]) {
+    if (!Array.isArray(numbers) || numbers.length === 0) {
+        return 0
+    }
+
+    const sum = numbers.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+    const mean = sum / numbers.length
+    return mean
+}

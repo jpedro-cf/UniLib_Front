@@ -74,13 +74,11 @@ export function useDragDrop({ onFileSelect, initialPreview }: DragDropPros) {
             const file = await urlToFile(initialPreview!)
             setCurrentFile(file)
 
-            if (file.type.match('image.*')) {
-                const reader = new FileReader()
-                reader.onload = () => {
-                    setPreview(reader.result as string)
-                }
-                reader.readAsDataURL(file)
+            const reader = new FileReader()
+            reader.onload = () => {
+                setPreview(reader.result as string)
             }
+            reader.readAsDataURL(file)
         }
         handle()
     }, [initialPreview])

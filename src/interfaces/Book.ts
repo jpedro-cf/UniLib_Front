@@ -1,5 +1,5 @@
 import { ICategory } from './Category'
-import { IUser } from './User'
+import { ICompany } from './Company'
 
 export interface IBookReview {
     id: string
@@ -12,17 +12,14 @@ export interface IBookReview {
 export interface IBook {
     id: string
     title: string
-    available: boolean
-    rating: number
     categories: ICategory[]
     reviews: IBookReview[]
     description: string
     image: string
     pdf: string
-    company_id: string
-    has_ebook: boolean
-    created_at: Date
-    updated_at: Date
+    company: ICompany
+    createdAt: Date
+    updatedAt: Date
 }
 
 export interface IReadBookResponse {
@@ -35,7 +32,8 @@ export type BorrowStatus = 'COMPLETED' | 'IN_PROGRESS' | 'WAITING'
 export interface IBorrowedBook {
     id: string
     book: Partial<IBook>
-    user: Partial<IUser>
+    username: string
+    email: string
     status: BorrowStatus
     expires_at: Date
     release_at: Date

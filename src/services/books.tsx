@@ -1,56 +1,19 @@
 import { BookFormSchema } from '@/components/book/BookForm'
 import { toast } from '@/components/ui/use-toast'
-import { env } from '@/config/env'
 import { IBook, IBorrowedBook, IReadBookResponse } from '@/interfaces/Book'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import axios from 'axios'
-import { mockUser } from './users'
 import { PaginationResponse } from '@/interfaces'
+import { api } from '@/config/axios'
 
-export const mockBook = (): IBook => {
-    return {
-        id: '5579dd2e-ed72-417b-9f64-077fe86dda27',
-        title: 'Diário de um banana',
-        available: true,
-        rating: 4.2,
-        categories: [
-            {
-                id: '785bd9f7-eb00-4703-b84b-a8b38814bdd8',
-                title: 'Ação',
-                description:
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-            }
-        ],
-        reviews: [
-            {
-                id: '1',
-                name: 'João Silva',
-                rating: 4,
-                comment: 'Ótimo livro! Muito informativo e bem escrito.',
-                date: new Date()
-            }
-        ],
-        description:
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-        image: 'https://encadernacaocapadura.com/wp-content/uploads/2022/05/livro-capa-dura.jpg',
-        pdf: 'https://eppg.fgv.br/sites/default/files/teste.pdf',
-        company_id: 'de41f0b8-d27a-4722-bcbd-16d2583ed4c4',
-        has_ebook: true,
-        created_at: new Date(),
-        updated_at: new Date()
-    }
-}
-
-export const useBooks = (id?: string) => {
+export const useBooks = (company_id?: string) => {
     const submit = async (): Promise<PaginationResponse<IBook>> => {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-
-        return {
-            content: [mockBook()],
-            last: true,
-            totalElements: 1,
-            totalPages: 1
-        }
+        const res = await api.get(`/books`, {
+            params: {
+                size: 999,
+                companyId: company_id
+            }
+        })
+        return res.data
     }
 
     const results = useQuery({
@@ -64,22 +27,8 @@ export const useBooks = (id?: string) => {
 
 export const useBorrowedBooks = (enabled: boolean) => {
     const submit = async (): Promise<PaginationResponse<IBorrowedBook>> => {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        return {
-            content: [
-                {
-                    book: mockBook(),
-                    user: mockUser(),
-                    status: 'IN_PROGRESS',
-                    id: '123',
-                    expires_at: new Date(),
-                    release_at: new Date()
-                }
-            ],
-            last: true,
-            totalElements: 1,
-            totalPages: 1
-        }
+        const res = await api.get(`/books/borrows`)
+        return res.data
     }
 
     return useQuery({
@@ -91,9 +40,8 @@ export const useBorrowedBooks = (enabled: boolean) => {
 }
 
 export const useBook = (id: IBook['id']) => {
-    const submit = async () => {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        const res = await axios.get(`${env.base_url}/books/${id}`)
+    const submit = async (): Promise<IBook> => {
+        const res = await api.get(`/books/${id}`)
         return res.data
     }
 
@@ -109,11 +57,8 @@ export const useBook = (id: IBook['id']) => {
 
 export const useReader = (id: string) => {
     const submit = async (): Promise<IReadBookResponse> => {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        return {
-            book: mockBook(),
-            url: '/public/documents/livro.pdf'
-        }
+        const res = await api.get(`/books/${id}/read`)
+        return res.data
     }
 
     const result = useQuery({
@@ -128,8 +73,6 @@ export const useReader = (id: string) => {
 
 export const useBookMutation = () => {
     const submit = async (data: BookFormSchema): Promise<IBook> => {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-
         const formdata = new FormData()
 
         formdata.append('companyId', data.company_id)
@@ -143,12 +86,17 @@ export const useBookMutation = () => {
             formdata.append('pdf', data.pdf, data.pdf.name)
         }
         if (data.categories) {
-            data.categories.map((category) => {
-                formdata.append('categories[]', category.value)
+            data.categories.forEach((c) => {
+                formdata.append('categories[]', c.value)
             })
         }
 
-        return mockBook()
+        const res = await api.post('/books', formdata, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        return res.data
     }
 
     return useMutation({
@@ -170,6 +118,39 @@ export const useBookMutation = () => {
     })
 }
 
+interface BorrowBookData {
+    book_id: string
+    release: Date
+    expiration: Date
+}
+
+export const useBorrowBook = () => {
+    const submit = async (data: BorrowBookData) => {
+        await api.post(`/books/${data.book_id}/borrow`, {
+            release: data.release ?? new Date(),
+            expiration: data.expiration ?? new Date()
+        })
+    }
+
+    return useMutation({
+        mutationFn: submit,
+        onSuccess: () => {
+            toast({
+                title: 'Sucesso!',
+                variant: 'default',
+                description: <div>Livro solicitado com sucesso, aguarde a confirmação.</div>
+            })
+        },
+        onError: () => {
+            toast({
+                title: 'Erro!',
+                variant: 'destructive',
+                description: <div>Ocorreu um erro ao solicitar o livro.</div>
+            })
+        }
+    })
+}
+
 export enum BorrowAction {
     APPROVE,
     DENY
@@ -182,13 +163,11 @@ interface BorrowedBookRequest {
 
 export const useBorrowedBookMutation = () => {
     const approve = async (data: BorrowedBookRequest): Promise<void> => {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        return
+        await api.put(`/books/borrows/${data.borrow_id}`)
     }
 
     const deny = async (data: BorrowedBookRequest): Promise<void> => {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        return
+        await api.delete(`/books/borrows/${data.borrow_id}`)
     }
 
     const submit = async (data: BorrowedBookRequest) => {

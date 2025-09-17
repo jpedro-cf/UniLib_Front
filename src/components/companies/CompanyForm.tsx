@@ -6,7 +6,7 @@ import { Form, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { deleteCompany, editCompany } from '@/services/companies'
+import { createCompany, deleteCompany, editCompany } from '@/services/companies'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from '@/components/ui/use-toast'
 import {
@@ -15,6 +15,7 @@ import {
     DragDropFileInfo,
     DragDropImagePreview
 } from '@/components/forms/drag-drop'
+import { env } from '@/config/env'
 
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 
@@ -95,7 +96,7 @@ export const CompanyForm = ({ company }: Props) => {
     })
 
     const createMutation = useMutation({
-        mutationFn: editCompany,
+        mutationFn: createCompany,
         onSuccess: () => {
             toast({
                 title: 'Sucesso!',
@@ -137,7 +138,7 @@ export const CompanyForm = ({ company }: Props) => {
                     name="image"
                     render={({ fieldState }) => (
                         <DragDropComponent
-                            initialPreview={company?.image}
+                            initialPreview={company ? `${env.storage_url}/${company.image}` : undefined}
                             onFileSelect={handleFileSelect}
                             className={`w-full lg:w-[250px] h-[250px] ${
                                 fieldState.error && 'bg-red-50 border-red-400'

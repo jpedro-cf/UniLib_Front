@@ -1,30 +1,17 @@
 import { CompanyFormSchema } from '@/components/companies/CompanyForm'
-import { env } from '@/config/env'
 import { ICompany, ICompanyMember } from '@/interfaces/Company'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import axios from 'axios'
 import { z } from 'zod'
-import { mockUser } from './users'
 import { toast } from '@/components/ui/use-toast'
 import { IBorrowedBook } from '@/interfaces/Book'
-import { mockBook } from './books'
 import { PaginationResponse } from '@/interfaces'
-
-const mockCompany = (id?: string): ICompany => {
-    return {
-        id: id ?? '123',
-        description: 'description',
-        image: '/public/images/logos/logo1.svg',
-        name: 'Empresa',
-        createdAt: new Date()
-    }
-}
+import { api } from '@/config/axios'
 
 export const useCompany = (id: string) => {
     const submit = async (): Promise<ICompany> => {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
+        const res = await api.get(`/companies/${id}`)
 
-        return mockCompany(id)
+        return res.data
     }
 
     const result = useQuery({
@@ -39,16 +26,8 @@ export const useCompany = (id: string) => {
 
 export const useCompanyMembers = (id: string) => {
     const submit = async (): Promise<ICompanyMember[]> => {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        return [
-            {
-                company_id: id,
-                id: '123',
-                role: 'OWNER',
-                name: 'nome',
-                email: 'email@email.com'
-            }
-        ]
+        const res = await api.get(`/companies/${id}/members`)
+        return res.data
     }
 
     const result = useQuery({
@@ -61,10 +40,14 @@ export const useCompanyMembers = (id: string) => {
     return result
 }
 
+interface RemoveCompanyData {
+    company_id: string
+    member_id: string
+}
+
 export const useRemoveCompanyMember = () => {
-    const submit = async (member_id: string): Promise<void> => {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        return
+    const submit = async ({ company_id, member_id }: RemoveCompanyData): Promise<void> => {
+        await api.delete(`/companies/${company_id}/members/${member_id}`)
     }
 
     const result = useMutation({
@@ -90,22 +73,8 @@ export const useRemoveCompanyMember = () => {
 
 export const useCompanyBorrowedBooks = (company_id: string) => {
     const submit = async (): Promise<PaginationResponse<IBorrowedBook>> => {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        return {
-            content: [
-                {
-                    book: mockBook(),
-                    user: mockUser(),
-                    status: 'IN_PROGRESS',
-                    id: '123',
-                    expires_at: new Date(),
-                    release_at: new Date()
-                }
-            ],
-            last: true,
-            totalElements: 1,
-            totalPages: 1
-        }
+        const res = await api.get(`/books/borrows?companyId=${company_id}`)
+        return res.data
     }
 
     return useQuery({
@@ -127,23 +96,31 @@ export const editCompany = async (data: z.infer<typeof CompanyFormSchema>) => {
         formData.append('image', data.image, data.image.name)
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    return mockCompany()
+    const res = await api.put(`/companies/${data.id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+    return res.data
 }
 
 export const deleteCompany = async (id: string) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await api.delete(`/companies/${id}`)
     return
 }
 
 export const createCompany = async (data: z.infer<typeof CompanyFormSchema>) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000))
     const formData = new FormData()
 
     formData.append('name', data.name)
     formData.append('description', data.description)
-    formData.append('image', data.image!, data.image!.name)
+    formData.append('image', data.image!, data.image?.name)
 
-    return mockCompany()
+    const res = await api.post(`/companies`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+
+    return res.data
 }

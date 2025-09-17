@@ -2,7 +2,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { IBorrowedBook } from '@/interfaces/Book'
 import { Button } from '../ui/button'
-import { Settings } from 'lucide-react'
+import { Settings, Star } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { BorrowedBookStatus } from './BorrowedBookStatus'
 import { BorrowAction, useBorrowedBookMutation } from '@/services/books'
@@ -23,6 +23,7 @@ export function BorrowedBooksTable({ items, admin }: Props) {
                     <TableHead>Solicitado em:</TableHead>
                     <TableHead>Expira em:</TableHead>
                     <TableHead>Ações</TableHead>
+                    {!admin && <TableHead>Review</TableHead>}
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -30,13 +31,13 @@ export function BorrowedBooksTable({ items, admin }: Props) {
                     <TableRow>
                         <TableCell>{item.book.title}</TableCell>
                         <TableCell>
-                            {item.user.name} - {item.user.email}
+                            {item.username} - {item.email}
                         </TableCell>
                         <TableCell>
                             <BorrowedBookStatus status={item.status} />
                         </TableCell>
-                        <TableCell>{item.release_at.toDateString()}</TableCell>
-                        <TableCell>{item.expires_at.toDateString()}</TableCell>
+                        <TableCell>{new Date(item.release_at).toDateString()}</TableCell>
+                        <TableCell>{new Date(item.expires_at).toDateString()}</TableCell>
                         <TableCell>
                             {admin ? (
                                 <DropdownMenu>
@@ -57,6 +58,13 @@ export function BorrowedBooksTable({ items, admin }: Props) {
                                 </NavLink>
                             )}
                         </TableCell>
+                        {!admin && (
+                            <TableCell>
+                                <Button variant={'outline'} size={'sm'} disabled={item.status == 'WAITING'}>
+                                    Adicionar Review <Star size={14} className="ms-1" />
+                                </Button>
+                            </TableCell>
+                        )}
                     </TableRow>
                 ))}
             </TableBody>
@@ -72,19 +80,21 @@ function AdminActions({ item }: { item: IBorrowedBook }) {
 
     return (
         <>
-            <DropdownMenuItem>
-                <button
-                    disabled={isPending}
-                    className="w-full text-start"
-                    type="button"
-                    onClick={() => mutate(approve)}
-                >
-                    Aceitar
-                </button>
-            </DropdownMenuItem>
+            {item.status == 'WAITING' && (
+                <DropdownMenuItem>
+                    <button
+                        disabled={isPending}
+                        className="w-full text-start"
+                        type="button"
+                        onClick={() => mutate(approve)}
+                    >
+                        Aceitar
+                    </button>
+                </DropdownMenuItem>
+            )}
             <DropdownMenuItem>
                 <button disabled={isPending} className="w-full text-start" type="button" onClick={() => mutate(deny)}>
-                    Negar
+                    {item.status == 'WAITING' ? 'Recusar' : 'Deletar'}
                 </button>
             </DropdownMenuItem>
         </>
