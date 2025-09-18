@@ -138,16 +138,22 @@ export const useBookMutation = () => {
 
     return useMutation({
         mutationFn: submit,
-        onSuccess: (data) => {
+        onSuccess: (data, variables) => {
             toast({
                 title: 'Sucesso!',
                 variant: 'default',
                 description: <div>Livro publicado com sucesso.</div>
             })
             queryClient.setQueryData(['books'], (oldData: PaginationResponse<IBook>) => {
+                if (variables.id) {
+                    return {
+                        ...oldData,
+                        content: oldData.content.map((b) => (b.id == data.id ? data : b))
+                    }
+                }
                 return {
                     ...oldData,
-                    content: oldData.content.map((b) => (b.id == data.id ? data : b))
+                    content: [data, ...oldData.content]
                 }
             })
         },

@@ -47,7 +47,7 @@ export function useCategoryMutation() {
             queryClient.setQueryData(['categories'], (oldData: PaginationResponse<ICategory>) => {
                 return {
                     ...oldData,
-                    content: oldData.content.map((c) => (c.id == data.id ? data : c))
+                    content: [data, ...oldData.content]
                 }
             })
         },
