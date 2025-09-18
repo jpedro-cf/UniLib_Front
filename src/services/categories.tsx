@@ -52,3 +52,27 @@ export function useCategoryMutation() {
         }
     })
 }
+
+export function useCategoryDeletion() {
+    const submit = async (id: string): Promise<void> => {
+        await api.delete(`/categories/${id}`)
+    }
+
+    return useMutation({
+        mutationFn: submit,
+        onSuccess: () => {
+            toast({
+                title: 'Sucesso!',
+                variant: 'default',
+                description: <div>Categoria deletada com sucesso.</div>
+            })
+        },
+        onError: () => {
+            toast({
+                title: 'Erro!',
+                variant: 'destructive',
+                description: <div>Ocorreu um erro ao deletar a categoria.</div>
+            })
+        }
+    })
+}

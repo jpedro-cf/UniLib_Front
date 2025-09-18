@@ -3,7 +3,6 @@ import { IBookReview } from '@/interfaces'
 import { Ratings } from '../ui/rating'
 import { Button } from '../ui/button'
 import { useReviewDeletion } from '@/services/books'
-import { Star } from 'lucide-react'
 interface Props {
     items: IBookReview[]
 }
