@@ -184,6 +184,7 @@ export const useCompanyBorrowedBooks = (company_id: string) => {
 
 export function useCompanyDeletion() {
     const navigate = useNavigate()
+    const { user, setUser } = useAuth()
 
     const submit = async (id: string) => {
         await api.delete(`/companies/${id}`)
@@ -191,12 +192,15 @@ export function useCompanyDeletion() {
 
     return useMutation({
         mutationFn: submit,
-        onSuccess: () => {
+        onSuccess: (data, variables) => {
             toast({
                 title: 'Deletado!',
                 variant: 'default',
                 description: <div>Empresa deletada com sucesso.</div>
             })
+            if (user) {
+                setUser({ ...user, memberships: user?.memberships.filter((m) => m.company.id != variables) })
+            }
             navigate('/', { replace: true })
         },
         onError: () => {

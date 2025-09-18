@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Document, Page, pdfjs } from 'react-pdf'
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -19,14 +19,18 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 export const Reader = () => {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
-    if (!id) {
-        navigate('/', { replace: true })
-    }
+
     const [numPages, setNumPages] = useState(0)
     const [page, setPage] = useState(1)
     const [scale, setScale] = useState(1.0)
 
     const { data, isLoading, isRefetching, isError } = useReader(id!)
+
+    useEffect(() => {
+        if (!id) {
+            navigate('/', { replace: true })
+        }
+    }, [id])
 
     if (isLoading || isRefetching) {
         return <>Loading...</>

@@ -24,7 +24,6 @@ export const useUsers = () => {
 
 export const useCurrentUser = (shouldFetch: boolean) => {
     const submit = async (): Promise<ICurrentUserData> => {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
         const res = await api.get('/auth/me')
         return res.data
     }
@@ -33,7 +32,7 @@ export const useCurrentUser = (shouldFetch: boolean) => {
         queryKey: ['me'],
         queryFn: submit,
         enabled: shouldFetch,
-        retry: 2,
+        retry: false,
         refetchOnWindowFocus: false
     })
 

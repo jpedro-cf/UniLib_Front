@@ -6,13 +6,14 @@ import { Outlet } from 'react-router-dom'
 
 export function PersistAuth() {
     const { user, setUser } = useAuth()
-    const { data, isLoading, isRefetching, isSuccess, isFetching } = useCurrentUser(!user)
+    const { data, isLoading, isRefetching, isSuccess, isFetching, isError } = useCurrentUser(!user)
 
     useEffect(() => {
-        if (isSuccess) {
-            if (!user && data) {
-                setUser(data)
-            }
+        if (isSuccess && !user && data) {
+            setUser(data)
+        }
+        if (isError) {
+            setUser(null)
         }
     }, [user, isSuccess, data])
 

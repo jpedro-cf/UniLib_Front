@@ -18,15 +18,14 @@ export const BookPage = () => {
     const { id } = useParams<{ id: IBook['id'] }>()
     const navigate = useNavigate()
 
-    if (!id) {
-        navigate('/', { replace: true })
-    }
-
     const { data: book, isLoading, isRefetching, isSuccess, isError, refetch } = useBook(id!)
     const { data: companyBooks, refetch: refetchCompanyBooks } = useBooks(book?.company.id)
     const { mutate, isPending } = useBorrowBook()
 
     useEffect(() => {
+        if (!id) {
+            navigate('/', { replace: true })
+        }
         refetch()
         refetchCompanyBooks()
     }, [id])
