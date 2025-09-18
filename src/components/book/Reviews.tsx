@@ -20,7 +20,7 @@ export const Reviews = ({ reviews }: Props) => {
                         <div className="text-gray-500 text-sm mb-2">
                             {format(new Date(review.createdAt), 'dd MMMM yyy')}
                         </div>
-                        <p className="text-gray-700">{review.comment}</p>
+                        <p className="text-gray-700 break-words">{review.comment}</p>
                     </div>
                 ))}
             </div>

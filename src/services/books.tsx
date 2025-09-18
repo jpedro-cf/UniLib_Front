@@ -281,6 +281,30 @@ export const useReviewMutation = () => {
     })
 }
 
+export const useReviewDeletion = () => {
+    const submit = async (id: string): Promise<void> => {
+        await api.delete(`/reviews/${id}`)
+    }
+
+    return useMutation({
+        mutationFn: submit,
+        onSuccess: () => {
+            toast({
+                title: 'Sucesso!',
+                variant: 'default',
+                description: <div>Review deletada com sucesso.</div>
+            })
+        },
+        onError: () => {
+            toast({
+                title: 'Erro!',
+                variant: 'destructive',
+                description: <div>Ocorreu um erro ao deletar a review.</div>
+            })
+        }
+    })
+}
+
 export const useReviews = () => {
     const submit = async (): Promise<IBookReview[]> => {
         const res = await api.get('/reviews')

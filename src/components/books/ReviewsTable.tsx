@@ -2,10 +2,13 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { IBookReview } from '@/interfaces'
 import { Ratings } from '../ui/rating'
 import { Button } from '../ui/button'
+import { useReviewDeletion } from '@/services/books'
+import { Star } from 'lucide-react'
 interface Props {
     items: IBookReview[]
 }
 export function ReviewsTable({ items }: Props) {
+    const { mutate, isPending } = useReviewDeletion()
     return (
         <Table>
             <TableCaption>Essas são todas as reviews.</TableCaption>
@@ -21,12 +24,18 @@ export function ReviewsTable({ items }: Props) {
                 {items.map((item) => (
                     <TableRow>
                         <TableCell>
-                            <Ratings rating={item.rating} />
+                            <Ratings rating={item.rating} variant="yellow" size={16} />
                         </TableCell>
-                        <TableCell>{item.comment}</TableCell>
+                        <TableCell>
+                            <div className="w-[400px] overflow-hidden overflow-ellipsis break-words">
+                                {item.comment.length > 100 ? item.comment.slice(0, 100).concat('...') : item.comment}
+                            </div>
+                        </TableCell>
                         <TableCell>{new Date(item.createdAt).toString()}</TableCell>
                         <TableCell>
-                            <Button variant={'destructive'}>Deletar</Button>
+                            <Button variant={'destructive'} disabled={isPending} onClick={() => mutate(item.id)}>
+                                Deletar
+                            </Button>
                         </TableCell>
                     </TableRow>
                 ))}
