@@ -1,11 +1,12 @@
 import { CompanyFormSchema } from '@/components/companies/CompanyForm'
 import { ICompany, ICompanyMember } from '@/interfaces/Company'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { z } from 'zod'
 import { toast } from '@/components/ui/use-toast'
 import { IBorrowedBook } from '@/interfaces/Book'
 import { PaginationResponse } from '@/interfaces'
 import { api } from '@/config/axios'
+import { useNavigate } from 'react-router-dom'
 
 export const useCompany = (id: string) => {
     const submit = async (): Promise<ICompany> => {
@@ -21,6 +22,73 @@ export const useCompany = (id: string) => {
     })
 
     return result
+}
+
+export function useCompanyMutation() {
+    const queryClient = useQueryClient()
+
+    const createCompany = async (data: z.infer<typeof CompanyFormSchema>) => {
+        const formData = new FormData()
+
+        formData.append('name', data.name)
+        formData.append('description', data.description)
+        if (data.image) {
+            formData.append('image', data.image, data.image.name)
+        }
+
+        const res = await api.post(`/companies`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+
+        return res.data
+    }
+
+    const editCompany = async (data: z.infer<typeof CompanyFormSchema>) => {
+        const formData = new FormData()
+
+        formData.append('id', data.id!)
+        formData.append('name', data.name)
+        formData.append('description', data.description)
+
+        if (data.image) {
+            formData.append('image', data.image, data.image.name)
+        }
+
+        const res = await api.put(`/companies/${data.id}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        return res.data
+    }
+
+    const submit = async (data: z.infer<typeof CompanyFormSchema>): Promise<ICompany> => {
+        return data.id ? await editCompany(data) : await createCompany(data)
+    }
+
+    return useMutation({
+        mutationFn: submit,
+        onSuccess: (data) => {
+            toast({
+                title: 'Sucesso!',
+                variant: 'default',
+                description: <div>Empresa publicada com sucesso.</div>
+            })
+            queryClient.setQueryData(['company'], () => {
+                return data
+            })
+        },
+        onError: (e) => {
+            console.log(e)
+            toast({
+                title: 'Erro!',
+                variant: 'destructive',
+                description: <div>Ocorreu um erro ao publicar a empresa.</div>
+            })
+        }
+    })
 }
 
 export const useCompanyMembers = (id: string) => {
@@ -44,17 +112,23 @@ interface RemoveCompanyData {
 }
 
 export const useRemoveCompanyMember = () => {
+    const queryClient = useQueryClient()
+
     const submit = async ({ company_id, member_id }: RemoveCompanyData): Promise<void> => {
         await api.delete(`/companies/${company_id}/members/${member_id}`)
     }
 
     const result = useMutation({
         mutationFn: submit,
-        onSuccess: () => {
+        onSuccess: (data, variables) => {
             toast({
                 title: 'Removido!',
                 variant: 'default',
                 description: <div>Membro removido com sucesso.</div>
+            })
+
+            queryClient.setQueryData(['company_members'], (oldData: ICompanyMember[]) => {
+                return oldData.filter((m) => m.id != variables.member_id)
             })
         },
         onError: () => {
@@ -76,48 +150,35 @@ export const useCompanyBorrowedBooks = (company_id: string) => {
     }
 
     return useQuery({
-        queryKey: ['borrows'],
+        queryKey: ['company_borrows'],
         queryFn: submit,
         refetchOnWindowFocus: false
     })
 }
 
-export const editCompany = async (data: z.infer<typeof CompanyFormSchema>) => {
-    const formData = new FormData()
+export function useCompanyDeletion() {
+    const navigate = useNavigate()
 
-    formData.append('id', data.id!)
-    formData.append('name', data.name)
-    formData.append('description', data.description)
-
-    if (data.image) {
-        formData.append('image', data.image, data.image.name)
+    const submit = async (id: string) => {
+        await api.delete(`/companies/${id}`)
     }
 
-    const res = await api.put(`/companies/${data.id}`, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
+    return useMutation({
+        mutationFn: submit,
+        onSuccess: () => {
+            toast({
+                title: 'Deletado!',
+                variant: 'default',
+                description: <div>Empresa deletada com sucesso.</div>
+            })
+            navigate('/', { replace: true })
+        },
+        onError: () => {
+            toast({
+                title: 'Erro!',
+                variant: 'destructive',
+                description: <div>Ocorreu um erro ao deletar a empresa.</div>
+            })
         }
     })
-    return res.data
-}
-
-export const deleteCompany = async (id: string) => {
-    await api.delete(`/companies/${id}`)
-    return
-}
-
-export const createCompany = async (data: z.infer<typeof CompanyFormSchema>) => {
-    const formData = new FormData()
-
-    formData.append('name', data.name)
-    formData.append('description', data.description)
-    formData.append('image', data.image!, data.image?.name)
-
-    const res = await api.post(`/companies`, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    })
-
-    return res.data
 }

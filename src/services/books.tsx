@@ -1,7 +1,7 @@
 import { BookFormSchema } from '@/components/book/BookForm'
 import { toast } from '@/components/ui/use-toast'
 import { IBook, IBookReview, IBorrowedBook, IReadBookResponse } from '@/interfaces/Book'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { PaginationResponse } from '@/interfaces'
 import { api } from '@/config/axios'
 import { BookReviewSchema } from '@/components/books/BookReviewForm'
@@ -33,7 +33,7 @@ export const useBorrowedBooks = (enabled: boolean) => {
     }
 
     return useQuery({
-        queryKey: ['borrows'],
+        queryKey: ['my_borrows'],
         queryFn: submit,
         enabled,
         refetchOnWindowFocus: false
@@ -71,6 +71,8 @@ export const useReader = (id: string) => {
 }
 
 export const useBookMutation = () => {
+    const queryClient = useQueryClient()
+
     const create = async (data: BookFormSchema): Promise<IBook> => {
         if (!data.company_id) {
             throw new Error('Id da empresa é obrigatório.')
@@ -136,11 +138,17 @@ export const useBookMutation = () => {
 
     return useMutation({
         mutationFn: submit,
-        onSuccess: () => {
+        onSuccess: (data) => {
             toast({
                 title: 'Sucesso!',
                 variant: 'default',
                 description: <div>Livro publicado com sucesso.</div>
+            })
+            queryClient.setQueryData(['books'], (oldData: PaginationResponse<IBook>) => {
+                return {
+                    ...oldData,
+                    content: oldData.content.map((b) => (b.id == data.id ? data : b))
+                }
             })
         },
         onError: () => {
@@ -154,17 +162,25 @@ export const useBookMutation = () => {
 }
 
 export const useBookDeletion = () => {
+    const queryClient = useQueryClient()
+
     const submit = async (id: string) => {
         await api.delete(`/books/${id}`)
     }
 
     return useMutation({
         mutationFn: submit,
-        onSuccess: () => {
+        onSuccess: (data, variables) => {
             toast({
                 title: 'Sucesso!',
                 variant: 'default',
                 description: <div>Livro deletado com sucesso.</div>
+            })
+            queryClient.setQueryData(['books'], (oldData: PaginationResponse<IBook>) => {
+                return {
+                    ...oldData,
+                    content: oldData.content.filter((b) => b.id != variables)
+                }
             })
         },
         onError: () => {
@@ -221,6 +237,8 @@ interface BorrowedBookRequest {
 }
 
 export const useBorrowedBookMutation = () => {
+    const queryClient = useQueryClient()
+
     const approve = async (data: BorrowedBookRequest): Promise<void> => {
         await api.put(`/books/borrows/${data.borrow_id}`)
     }
@@ -235,11 +253,25 @@ export const useBorrowedBookMutation = () => {
 
     return useMutation({
         mutationFn: submit,
-        onSuccess: () => {
+        onSuccess: (data, variables) => {
             toast({
                 title: 'Sucesso!',
                 variant: 'default',
                 description: <div>Ação realizada com sucesso.</div>
+            })
+            queryClient.setQueryData(['company_borrows'], (oldData: PaginationResponse<IBorrowedBook>) => {
+                if (variables.action == BorrowAction.APPROVE) {
+                    return {
+                        ...oldData,
+                        content: oldData.content.map((b) =>
+                            b.id == variables.borrow_id ? { ...b, status: 'IN_PROGRESS' } : b
+                        )
+                    }
+                }
+                return {
+                    ...oldData,
+                    content: oldData.content.filter((b) => b.id != variables.borrow_id)
+                }
             })
         },
         onError: () => {
@@ -282,17 +314,22 @@ export const useReviewMutation = () => {
 }
 
 export const useReviewDeletion = () => {
+    const queryClient = useQueryClient()
+
     const submit = async (id: string): Promise<void> => {
         await api.delete(`/reviews/${id}`)
     }
 
     return useMutation({
         mutationFn: submit,
-        onSuccess: () => {
+        onSuccess: (data, variables) => {
             toast({
                 title: 'Sucesso!',
                 variant: 'default',
                 description: <div>Review deletada com sucesso.</div>
+            })
+            queryClient.setQueryData(['reviews'], (oldData: IBookReview[]) => {
+                return oldData.filter((r) => r.id != variables)
             })
         },
         onError: () => {

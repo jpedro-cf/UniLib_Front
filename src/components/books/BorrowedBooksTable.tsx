@@ -6,7 +6,7 @@ import { Settings, Star } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { BorrowedBookStatus } from './BorrowedBookStatus'
 import { BorrowAction, useBorrowedBookMutation } from '@/services/books'
-import { BookReviewDialog } from './BookReviewDialog'
+import { BookReviewDialog } from '../dialogs/BookReviewDialog'
 
 interface Props {
     admin: boolean

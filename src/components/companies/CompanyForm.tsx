@@ -6,9 +6,7 @@ import { Form, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { createCompany, deleteCompany, editCompany } from '@/services/companies'
-import { useMutation } from '@tanstack/react-query'
-import { toast } from '@/components/ui/use-toast'
+import { useCompanyDeletion, useCompanyMutation } from '@/services/companies'
 import {
     DragDropComponent,
     DragDropContent,
@@ -57,69 +55,11 @@ export const CompanyForm = ({ company }: Props) => {
         }
     })
 
-    const editMutation = useMutation({
-        mutationFn: editCompany,
-        onSuccess: () => {
-            toast({
-                title: 'Editado!',
-                variant: 'default',
-                description: <div>Empresa edita com sucesso.</div>
-            })
-            window.location.reload()
-        },
-        onError: () => {
-            toast({
-                title: 'Erro!',
-                variant: 'destructive',
-                description: <div>Ocorreu um erro ao editar a empresa.</div>
-            })
-        }
-    })
-
-    const deleteMutation = useMutation({
-        mutationFn: () => deleteCompany(company!.id!),
-        onSuccess: () => {
-            toast({
-                title: 'Deletado!',
-                variant: 'default',
-                description: <div>Empresa deletada com sucesso.</div>
-            })
-            window.location.reload()
-        },
-        onError: () => {
-            toast({
-                title: 'Erro!',
-                variant: 'destructive',
-                description: <div>Ocorreu um erro ao deletar a empresa.</div>
-            })
-        }
-    })
-
-    const createMutation = useMutation({
-        mutationFn: createCompany,
-        onSuccess: () => {
-            toast({
-                title: 'Sucesso!',
-                variant: 'default',
-                description: <div>Empresa criada com sucesso.</div>
-            })
-            window.location.reload()
-        },
-        onError: () => {
-            toast({
-                title: 'Erro!',
-                variant: 'destructive',
-                description: <div>Ocorreu um erro ao criar a empresa.</div>
-            })
-        }
-    })
+    const { mutate: deleteCompany, isPending: isDeleting } = useCompanyDeletion()
+    const { mutate, isPending } = useCompanyMutation()
 
     function onSubmit(values: z.infer<typeof CompanyFormSchema>) {
-        if (values.id) {
-            editMutation.mutate(values)
-        } else {
-            createMutation.mutate(values)
-        }
+        mutate(values)
     }
 
     function handleFileSelect(file: File | null) {
@@ -129,7 +69,8 @@ export const CompanyForm = ({ company }: Props) => {
         form.setValue('image', file, { shouldValidate: true })
     }
 
-    const pending = editMutation.isPending || createMutation.isPending || deleteMutation.isPending
+    const pending = isPending || isDeleting
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-5 w-full bg-[#fff] p-8 rounded-md border">
@@ -180,7 +121,7 @@ export const CompanyForm = ({ company }: Props) => {
                                 disabled={pending}
                                 type="button"
                                 variant={'destructive'}
-                                onClick={() => deleteMutation.mutate()}
+                                onClick={() => deleteCompany(company.id)}
                             >
                                 Deletar
                             </Button>

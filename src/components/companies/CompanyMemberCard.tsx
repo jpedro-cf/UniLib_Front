@@ -11,9 +11,10 @@ interface Props {
 
 export const CompanyMemberCard = ({ member }: Props) => {
     const { mutate, isPending } = useRemoveCompanyMember()
+
     function handleClick() {
         mutate({
-            company_id: member.company_id,
+            company_id: member.companyId,
             member_id: member.id
         })
     }

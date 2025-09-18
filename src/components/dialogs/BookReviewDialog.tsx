@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
-import { BookReviewForm } from './BookReviewForm'
+import { BookReviewForm } from '../books/BookReviewForm'
 
 interface Props extends PropsWithChildren {
     book_id: string

@@ -115,7 +115,7 @@ export const BookPage = () => {
                                     Obter livro <ShoppingBag size={16} className="ms-3" />
                                 </Button>
                             </div>
-                            <CompanyInfo />
+                            <CompanyInfo company={book.company} />
                         </div>
                     </div>
                     {book.reviews.length > 0 && <Reviews reviews={book.reviews} />}

@@ -3,7 +3,7 @@ import { toast } from '@/components/ui/use-toast'
 import { api } from '@/config/axios'
 import { PaginationResponse } from '@/interfaces'
 import { ICategory } from '@/interfaces/Category'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export const useCategories = () => {
     const submit = async (): Promise<PaginationResponse<ICategory>> => {
@@ -25,6 +25,8 @@ export const useCategories = () => {
 }
 
 export function useCategoryMutation() {
+    const queryClient = useQueryClient()
+
     const submit = async (data: CategoryFormSchema): Promise<ICategory> => {
         const res = await api.post('/categories', {
             title: data.title,
@@ -36,11 +38,17 @@ export function useCategoryMutation() {
 
     return useMutation({
         mutationFn: submit,
-        onSuccess: () => {
+        onSuccess: (data, variables) => {
             toast({
                 title: 'Sucesso!',
                 variant: 'default',
                 description: <div>Categoria publicada com sucesso.</div>
+            })
+            queryClient.setQueryData(['categories'], (oldData: PaginationResponse<ICategory>) => {
+                return {
+                    ...oldData,
+                    content: oldData.content.map((c) => (c.id == data.id ? data : c))
+                }
             })
         },
         onError: () => {
@@ -54,17 +62,25 @@ export function useCategoryMutation() {
 }
 
 export function useCategoryDeletion() {
+    const queryClient = useQueryClient()
+
     const submit = async (id: string): Promise<void> => {
         await api.delete(`/categories/${id}`)
     }
 
     return useMutation({
         mutationFn: submit,
-        onSuccess: () => {
+        onSuccess: (data, variables) => {
             toast({
                 title: 'Sucesso!',
                 variant: 'default',
                 description: <div>Categoria deletada com sucesso.</div>
+            })
+            queryClient.setQueryData(['categories'], (oldData: PaginationResponse<ICategory>) => {
+                return {
+                    ...oldData,
+                    content: oldData.content.filter((c) => c.id != variables)
+                }
             })
         },
         onError: () => {

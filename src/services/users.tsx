@@ -33,6 +33,7 @@ export const useCurrentUser = (shouldFetch: boolean) => {
         queryKey: ['me'],
         queryFn: submit,
         enabled: shouldFetch,
+        retry: 2,
         refetchOnWindowFocus: false
     })
 

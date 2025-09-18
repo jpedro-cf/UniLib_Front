@@ -2,7 +2,7 @@ import { cva } from 'class-variance-authority'
 import { BookText, List, Star } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import logo from '../../../public/images/logo-ipsum.svg'
-import { CurrentUserInfo } from './CurrentUserInfo'
+import { CurrentUserInfo } from '@/components/users/CurrentUserInfo'
 import { useAuth } from '@/context/auth-context'
 
 const linksProperties = cva('flex items-center gap-2 font-semibold py-1 px-3 rounded-sm', {
