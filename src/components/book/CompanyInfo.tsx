@@ -1,3 +1,4 @@
+import { env } from '@/config/env'
 import { ICompany } from '@/interfaces'
 
 interface Props {
@@ -7,7 +8,7 @@ export function CompanyInfo({ company }: Props) {
     return (
         <div className="flex items-center bg-white space-x-4 mt-4">
             <img
-                src="/public/images/logos/logo5.svg"
+                src={`${env.storage_url}/${company.image}`}
                 alt="logo da empresa"
                 className="w-[70px] h-[70px] object-cover rounded-full border border-gray-300"
             />
