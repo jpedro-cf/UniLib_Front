@@ -7,6 +7,7 @@ import { IBorrowedBook } from '@/interfaces/Book'
 import { PaginationResponse } from '@/interfaces'
 import { api } from '@/config/axios'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '@/context/auth-context'
 
 export const useCompany = (id: string) => {
     const submit = async (): Promise<ICompany> => {
@@ -26,6 +27,8 @@ export const useCompany = (id: string) => {
 
 export function useCompanyMutation() {
     const queryClient = useQueryClient()
+    const navigate = useNavigate()
+    const { user, setUser } = useAuth()
 
     const createCompany = async (data: z.infer<typeof CompanyFormSchema>) => {
         const formData = new FormData()
@@ -70,7 +73,7 @@ export function useCompanyMutation() {
 
     return useMutation({
         mutationFn: submit,
-        onSuccess: (data) => {
+        onSuccess: (data, variables) => {
             toast({
                 title: 'Sucesso!',
                 variant: 'default',
@@ -79,6 +82,29 @@ export function useCompanyMutation() {
             queryClient.setQueryData(['company'], () => {
                 return data
             })
+
+            if (!variables.id && user) {
+                setUser({
+                    ...user,
+                    id: user.id!,
+                    memberships: [...user.memberships, { company: data, role: 'OWNER' }]
+                })
+            }
+            if (variables.id && user) {
+                setUser({
+                    ...user,
+                    id: user.id!,
+                    memberships: user.memberships.map((m) =>
+                        m.company.id == data.id
+                            ? {
+                                  role: m.role,
+                                  company: data
+                              }
+                            : m
+                    )
+                })
+            }
+            navigate(`/admin/empresas/${data.id}`, { replace: true })
         },
         onError: (e) => {
             console.log(e)
