@@ -65,6 +65,30 @@ export const useLoginMutation = () => {
     })
 }
 
+export const useLogoutMutation = () => {
+    const { setUser } = useAuth()
+    const navigate = useNavigate()
+
+    const submit = async (): Promise<void> => {
+        await api.post('/auth/logout')
+    }
+
+    return useMutation({
+        mutationFn: submit,
+        onSuccess: () => {
+            setUser(null)
+            navigate('/', { replace: true })
+        },
+        onError: () => {
+            toast({
+                title: 'Erro!',
+                variant: 'destructive',
+                description: <div>Ocorreu um erro ao realizar o logout.</div>
+            })
+        }
+    })
+}
+
 export const useRegisterMutation = () => {
     const navigate = useNavigate()
 

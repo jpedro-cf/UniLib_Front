@@ -12,9 +12,11 @@ import { Avatar, AvatarFallback } from '../ui/avatar'
 import { NavLink } from 'react-router-dom'
 import { CreateCompanyDialog } from '../dialogs/CreateCompanyDialog'
 import { Button } from '../ui/button'
+import { useLogoutMutation } from '@/services/users'
 
 export function CurrentUserInfo() {
     const auth = useAuth()
+    const { mutate, isPending } = useLogoutMutation()
 
     if (!auth.user) {
         return (
@@ -55,7 +57,7 @@ export function CurrentUserInfo() {
                             </NavLink>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
-                            <NavLink to={'/'} className={'w-full'}>
+                            <NavLink to={'/'} className={'w-full'} onClick={() => !isPending && mutate()}>
                                 Sair
                             </NavLink>
                         </DropdownMenuItem>
