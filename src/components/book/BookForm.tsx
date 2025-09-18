@@ -8,9 +8,10 @@ import { Textarea } from '../ui/textarea'
 import { IBook } from '@/interfaces/Book'
 import { DragDropComponent, DragDropContent, DragDropFileInfo, DragDropImagePreview } from '../forms/drag-drop'
 import { useParams } from 'react-router-dom'
-import { useBookMutation } from '@/services/books'
+import { useBookDeletion, useBookMutation } from '@/services/books'
 import MultipleSelector from '@/components/ui/multiple-selector'
 import { useCategories } from '@/services/categories'
+import { env } from '@/config/env'
 
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 const ACCEPTED_PDF_TYPES = ['application/pdf']
@@ -19,7 +20,7 @@ export const bookFormSchema = z
     .object({
         id: z.string().optional(),
         title: z.string(),
-        company_id: z.string(),
+        company_id: z.string().optional(),
         description: z.string(),
         image: z
             .instanceof(File, { message: 'Input precisa ser um arquivo.' })
@@ -44,6 +45,14 @@ export const bookFormSchema = z
     })
     .superRefine((data, ctx) => {
         const isEdit = Boolean(data.id)
+
+        if (!isEdit && !data.company_id) {
+            ctx.addIssue({
+                path: ['company_id'],
+                code: 'custom',
+                message: 'Id da empresa é obrigatório.'
+            })
+        }
 
         if (!isEdit && !data.image) {
             ctx.addIssue({
@@ -76,13 +85,16 @@ export function BookForm({ book }: Props) {
         defaultValues: {
             id: book?.id,
             company_id: companyId,
+            title: book?.title,
+            description: book?.description,
             categories: book?.categories.map((c) => ({ value: c.id, label: c.title }))
         }
     })
 
     const { mutate, isPending } = useBookMutation()
+    const { mutate: deleteBook, isPending: isDeleting } = useBookDeletion()
 
-    if (!companyId) {
+    if (!book && !companyId) {
         return <>Id inválido.</>
     }
 
@@ -103,6 +115,15 @@ export function BookForm({ book }: Props) {
     function handleSubmit(data: BookFormSchema) {
         mutate(data)
     }
+
+    function handleDelete() {
+        if (!book) {
+            return
+        }
+
+        deleteBook(book.id)
+    }
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)} className="grid grid-cols-2 gap-3">
@@ -123,7 +144,7 @@ export function BookForm({ book }: Props) {
                         <FormItem>
                             <FormLabel>Imagem:</FormLabel>
                             <DragDropComponent
-                                initialPreview={book?.image}
+                                initialPreview={book ? `${env.storage_url}/${book?.image}` : undefined}
                                 onFileSelect={handleImageSelect}
                                 className={`w-full h-[150px] ${fieldState.error && 'bg-red-50 border-red-400'}`}
                             >
@@ -139,8 +160,9 @@ export function BookForm({ book }: Props) {
                     name="pdf"
                     render={({ field, fieldState }) => (
                         <FormItem>
-                            <FormLabel>PDF: {field.value?.name}</FormLabel>
+                            <FormLabel>PDF: {field.value?.name || book?.pdf}</FormLabel>
                             <DragDropComponent
+                                initialPreview={book ? `${env.storage_url}/${book.pdf}` : undefined}
                                 onFileSelect={handlePdfSelect}
                                 className={`w-full h-[150px] ${fieldState.error && 'bg-red-50 border-red-400'}`}
                             >
@@ -182,9 +204,20 @@ export function BookForm({ book }: Props) {
                         </FormItem>
                     )}
                 />
-                <Button type="submit" variant={'blue'} className="col-span-2" disabled={isPending}>
-                    Enviar
-                </Button>
+                <div className="flex gap-5 justify-between col-span-2">
+                    <Button type="submit" variant={'blue'} className="w-full" disabled={isPending || isDeleting}>
+                        Enviar
+                    </Button>
+                    <Button
+                        type="button"
+                        variant={'destructive'}
+                        className="w-full"
+                        disabled={isPending || isDeleting}
+                        onClick={handleDelete}
+                    >
+                        Deletar
+                    </Button>
+                </div>
             </form>
         </Form>
     )

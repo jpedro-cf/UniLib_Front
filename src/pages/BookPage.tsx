@@ -9,7 +9,6 @@ import { CompanyInfo } from '@/components/book/CompanyInfo'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { DoorOpen, FileWarningIcon, ShoppingBag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { toast } from '@/components/ui/use-toast'
 import { useEffect } from 'react'
 import { env } from '@/config/env'
 import { calculateMean } from '@/lib/utils'
@@ -88,7 +87,10 @@ export const BookPage = () => {
                                     {calculateMean(book.reviews.map((r) => r.rating))} / 5
                                 </p>
                                 <div className="ml-2 flex">
-                                    <Ratings rating={calculateMean(book.reviews.map((r) => r.rating))} />
+                                    <Ratings
+                                        rating={calculateMean(book.reviews.map((r) => r.rating))}
+                                        variant="yellow"
+                                    />
                                 </div>
                             </div>
                             <p className="mt-4 text-gray-700">{book.description}</p>

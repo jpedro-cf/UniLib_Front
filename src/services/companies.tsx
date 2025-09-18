@@ -17,7 +17,6 @@ export const useCompany = (id: string) => {
     const result = useQuery({
         queryKey: ['company'],
         queryFn: submit,
-        retry: false,
         refetchOnWindowFocus: false
     })
 
@@ -33,7 +32,6 @@ export const useCompanyMembers = (id: string) => {
     const result = useQuery({
         queryKey: ['company_members'],
         queryFn: submit,
-        retry: false,
         refetchOnWindowFocus: false
     })
 
@@ -80,7 +78,6 @@ export const useCompanyBorrowedBooks = (company_id: string) => {
     return useQuery({
         queryKey: ['borrows'],
         queryFn: submit,
-        retry: false,
         refetchOnWindowFocus: false
     })
 }

@@ -3,22 +3,26 @@ import { ICategory } from '@/interfaces/Category'
 import { Badge } from '../ui/badge'
 import { Ratings } from '../ui/rating'
 import { Button } from '../ui/button'
-import { PlusCircle } from 'lucide-react'
+import { PlusCircle, Settings } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { calculateMean } from '@/lib/utils'
 import { env } from '@/config/env'
+import { useAuth } from '@/context/auth-context'
+import { BookDialog } from '../book/BookDialog'
 
 interface Props {
     book: IBook
 }
 
 export const BooksCard = ({ book }: Props) => {
+    const { user } = useAuth()
+    const belongsToCompany = user?.memberships.some((m) => m.company.id == book.company.id)
     return (
         <div className="overflow-hidden rounded-md border border-blue-100">
             <div className="overflow-hidden h-[200px]">
                 <img src={`${env.storage_url}/${book.image}`} alt={book.title} className="w-full h-full object-cover" />
             </div>
-            <div className="p-5 bg-[#fff]">
+            <div className="p-5 bg-[#fff] h-full">
                 <div className="flex gap-2 flex-wrap mb-3">
                     {book.categories.map((category: ICategory, index) => (
                         <Badge variant={'secondary'} key={index}>
@@ -40,9 +44,16 @@ export const BooksCard = ({ book }: Props) => {
                 <div className="flex mt-5 gap-3">
                     <NavLink to={`/livro/${book.id}`}>
                         <Button variant={'blue'} size={'sm'}>
-                            Ver mais <PlusCircle size={16} className="ms-2" />{' '}
+                            Ver mais <PlusCircle size={16} className="ms-2" />
                         </Button>
                     </NavLink>
+                    {belongsToCompany && (
+                        <BookDialog book={book}>
+                            <Button size={'sm'} variant={'outline'}>
+                                Editar <Settings size={16} className="ms-2" />
+                            </Button>
+                        </BookDialog>
+                    )}
                 </div>
             </div>
         </div>

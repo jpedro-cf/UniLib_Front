@@ -6,6 +6,7 @@ import { Settings, Star } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { BorrowedBookStatus } from './BorrowedBookStatus'
 import { BorrowAction, useBorrowedBookMutation } from '@/services/books'
+import { BookReviewDialog } from './BookReviewDialog'
 
 interface Props {
     admin: boolean
@@ -60,9 +61,11 @@ export function BorrowedBooksTable({ items, admin }: Props) {
                         </TableCell>
                         {!admin && (
                             <TableCell>
-                                <Button variant={'outline'} size={'sm'} disabled={item.status == 'WAITING'}>
-                                    Adicionar Review <Star size={14} className="ms-1" />
-                                </Button>
+                                <BookReviewDialog book_id={item.book.id}>
+                                    <Button variant={'outline'} size={'sm'} disabled={item.status == 'WAITING'}>
+                                        Adicionar Review <Star size={14} className="ms-1" />
+                                    </Button>
+                                </BookReviewDialog>
                             </TableCell>
                         )}
                     </TableRow>

@@ -1,9 +1,10 @@
 import { BookFormSchema } from '@/components/book/BookForm'
 import { toast } from '@/components/ui/use-toast'
-import { IBook, IBorrowedBook, IReadBookResponse } from '@/interfaces/Book'
+import { IBook, IBookReview, IBorrowedBook, IReadBookResponse } from '@/interfaces/Book'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { PaginationResponse } from '@/interfaces'
 import { api } from '@/config/axios'
+import { BookReviewSchema } from '@/components/books/BookReviewForm'
 
 export const useBooks = (company_id?: string) => {
     const submit = async (): Promise<PaginationResponse<IBook>> => {
@@ -48,7 +49,6 @@ export const useBook = (id: IBook['id']) => {
     const result = useQuery({
         queryKey: ['book'],
         queryFn: submit,
-        retry: false,
         refetchOnWindowFocus: false
     })
 
@@ -64,7 +64,6 @@ export const useReader = (id: string) => {
     const result = useQuery({
         queryKey: ['read_book'],
         queryFn: submit,
-        retry: false,
         refetchOnWindowFocus: false
     })
 
@@ -72,7 +71,11 @@ export const useReader = (id: string) => {
 }
 
 export const useBookMutation = () => {
-    const submit = async (data: BookFormSchema): Promise<IBook> => {
+    const create = async (data: BookFormSchema): Promise<IBook> => {
+        if (!data.company_id) {
+            throw new Error('Id da empresa é obrigatório.')
+        }
+
         const formdata = new FormData()
 
         formdata.append('companyId', data.company_id)
@@ -87,7 +90,7 @@ export const useBookMutation = () => {
         }
         if (data.categories) {
             data.categories.forEach((c) => {
-                formdata.append('categories[]', c.value)
+                formdata.append('categories', c.value)
             })
         }
 
@@ -97,6 +100,38 @@ export const useBookMutation = () => {
             }
         })
         return res.data
+    }
+
+    const update = async (data: BookFormSchema): Promise<IBook> => {
+        if (!data.id) {
+            throw new Error('Id é obrigatório.')
+        }
+
+        const formdata = new FormData()
+        formdata.append('title', data.title)
+        formdata.append('description', data.description)
+
+        if (data.image) {
+            formdata.append('image', data.image, data.image.name)
+        }
+        if (data.pdf) {
+            formdata.append('pdf', data.pdf, data.pdf.name)
+        }
+        if (data.categories) {
+            data.categories.forEach((c) => {
+                formdata.append('categories', c.value)
+            })
+        }
+
+        const res = await api.put(`/books/${data.id}`, formdata, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        return res.data
+    }
+    const submit = async (data: BookFormSchema): Promise<IBook> => {
+        return data.id ? await update(data) : await create(data)
     }
 
     return useMutation({
@@ -113,6 +148,30 @@ export const useBookMutation = () => {
                 title: 'Erro!',
                 variant: 'destructive',
                 description: <div>Ocorreu um erro ao publicar o livro.</div>
+            })
+        }
+    })
+}
+
+export const useBookDeletion = () => {
+    const submit = async (id: string) => {
+        await api.delete(`/books/${id}`)
+    }
+
+    return useMutation({
+        mutationFn: submit,
+        onSuccess: () => {
+            toast({
+                title: 'Sucesso!',
+                variant: 'default',
+                description: <div>Livro deletado com sucesso.</div>
+            })
+        },
+        onError: () => {
+            toast({
+                title: 'Erro!',
+                variant: 'destructive',
+                description: <div>Ocorreu um erro ao deletar o livro.</div>
             })
         }
     })
@@ -190,5 +249,47 @@ export const useBorrowedBookMutation = () => {
                 description: <div>Ocorreu um erro ao realizar essa ação.</div>
             })
         }
+    })
+}
+
+export const useReviewMutation = () => {
+    const submit = async (data: BookReviewSchema): Promise<IBookReview> => {
+        const res = await api.post(`/reviews`, {
+            bookId: data.book_id,
+            rating: data.rating,
+            comment: data.comment
+        })
+        return res.data
+    }
+
+    return useMutation({
+        mutationFn: submit,
+        onSuccess: () => {
+            toast({
+                title: 'Sucesso!',
+                variant: 'default',
+                description: <div>Review adicionada com sucesso.</div>
+            })
+        },
+        onError: () => {
+            toast({
+                title: 'Erro!',
+                variant: 'destructive',
+                description: <div>Ocorreu um erro ao adicionar a review.</div>
+            })
+        }
+    })
+}
+
+export const useReviews = () => {
+    const submit = async (): Promise<IBookReview[]> => {
+        const res = await api.get('/reviews')
+        return res.data
+    }
+
+    return useQuery({
+        queryKey: ['reviews'],
+        queryFn: submit,
+        refetchOnWindowFocus: false
     })
 }

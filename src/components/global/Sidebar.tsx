@@ -1,5 +1,5 @@
 import { cva } from 'class-variance-authority'
-import { BookText, List } from 'lucide-react'
+import { BookText, List, Star } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import logo from '../../../public/images/logo-ipsum.svg'
 import { CurrentUserInfo } from './CurrentUserInfo'
@@ -40,19 +40,6 @@ export const Sidebar = () => {
                             Livros
                         </NavLink>
                     </li>
-                    {user && (
-                        <li>
-                            <NavLink
-                                to="/meus-livros"
-                                className={({ isActive, isPending }) =>
-                                    linksProperties({ active: isActive, pending: isPending })
-                                }
-                            >
-                                <BookText size={20} />
-                                Meus Livros
-                            </NavLink>
-                        </li>
-                    )}
                     <li>
                         <NavLink
                             to="/categorias"
@@ -64,6 +51,32 @@ export const Sidebar = () => {
                             Categorias
                         </NavLink>
                     </li>
+                    {user && (
+                        <>
+                            <li>
+                                <NavLink
+                                    to="/meus-livros"
+                                    className={({ isActive, isPending }) =>
+                                        linksProperties({ active: isActive, pending: isPending })
+                                    }
+                                >
+                                    <BookText size={20} />
+                                    Meus Livros
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
+                                    to="/minhas-reviews"
+                                    className={({ isActive, isPending }) =>
+                                        linksProperties({ active: isActive, pending: isPending })
+                                    }
+                                >
+                                    <Star size={20} />
+                                    Minhas Reviews
+                                </NavLink>
+                            </li>
+                        </>
+                    )}
                 </ul>
             </nav>
             <div className="justify-self-end mt-auto">

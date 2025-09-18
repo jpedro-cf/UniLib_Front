@@ -9,6 +9,7 @@ import { PersistAuth } from './components/global/PersistAuth'
 import { MyBooksPage } from './pages/MyBooksPage'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
+import { ReviewsPage } from './pages/ReviewsPage'
 
 function App() {
     return (
@@ -47,6 +48,14 @@ function App() {
                         element={
                             <Layout>
                                 <MyBooksPage />
+                            </Layout>
+                        }
+                    />
+                    <Route
+                        path="/minhas-reviews"
+                        element={
+                            <Layout>
+                                <ReviewsPage />
                             </Layout>
                         }
                     />
