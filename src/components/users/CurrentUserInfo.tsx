@@ -53,7 +53,7 @@ export function CurrentUserInfo() {
                     <DropdownMenuGroup>
                         <DropdownMenuItem>
                             <NavLink to={'/perfil'} className={'w-full'}>
-                                Editar Perfil
+                                Perfil
                             </NavLink>
                         </DropdownMenuItem>
                         <DropdownMenuItem>

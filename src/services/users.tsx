@@ -1,4 +1,5 @@
 import { toast } from '@/components/ui/use-toast'
+import { UserFormSchema } from '@/components/users/UserForm'
 import { api } from '@/config/axios'
 import { useAuth } from '@/context/auth-context'
 import { ICurrentUserData, IUser } from '@/interfaces/User'
@@ -111,6 +112,39 @@ export const useRegisterMutation = () => {
                 title: 'Erro!',
                 variant: 'destructive',
                 description: <div>Ocorreu um erro ao criar a conta.</div>
+            })
+        }
+    })
+}
+
+export function useUserMutation() {
+    const { setUser } = useAuth()
+    const submit = async (data: UserFormSchema): Promise<ICurrentUserData> => {
+        const valid = data.passwordChange?.newPassword && data.passwordChange.oldPassword
+
+        const res = await api.put('/users', {
+            name: data.name,
+            email: data.email,
+            passwordChange: valid ? data.passwordChange : null
+        })
+        return res.data
+    }
+
+    return useMutation({
+        mutationFn: submit,
+        onSuccess: (data) => {
+            toast({
+                title: 'Sucesso!',
+                variant: 'default',
+                description: <div>Perfil atualizado com sucesso.</div>
+            })
+            setUser(data)
+        },
+        onError: () => {
+            toast({
+                title: 'Erro!',
+                variant: 'destructive',
+                description: <div>Ocorreu um erro ao atualizar o conta.</div>
             })
         }
     })

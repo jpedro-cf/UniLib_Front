@@ -10,6 +10,7 @@ import { MyBooksPage } from './pages/MyBooksPage'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { ReviewsPage } from './pages/ReviewsPage'
+import { ProfilePage } from './pages/ProfilePage'
 
 function App() {
     return (
@@ -72,6 +73,14 @@ function App() {
                         element={
                             <Layout>
                                 <CompanyPage />
+                            </Layout>
+                        }
+                    />
+                    <Route
+                        path="/perfil"
+                        element={
+                            <Layout>
+                                <ProfilePage />
                             </Layout>
                         }
                     />
