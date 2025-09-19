@@ -30,15 +30,15 @@ export function BorrowedBooksTable({ items, admin }: Props) {
             <TableBody>
                 {items.map((item) => (
                     <TableRow>
-                        <TableCell>{item.book.title}</TableCell>
+                        <TableCell>{item.bookTitle}</TableCell>
                         <TableCell>
                             {item.username} - {item.email}
                         </TableCell>
                         <TableCell>
                             <BorrowedBookStatus status={item.status} />
                         </TableCell>
-                        <TableCell>{new Date(item.release_at).toDateString()}</TableCell>
-                        <TableCell>{new Date(item.expires_at).toDateString()}</TableCell>
+                        <TableCell>{item.releaseAt ? new Date(item.releaseAt).toDateString() : 'Indefinido'}</TableCell>
+                        <TableCell>{new Date(item.expiresAt).toDateString()}</TableCell>
                         <TableCell>
                             {admin ? (
                                 <DropdownMenu>
@@ -52,7 +52,14 @@ export function BorrowedBooksTable({ items, admin }: Props) {
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             ) : (
-                                <NavLink to={`/livro/${item.book.id}/reader`}>
+                                <NavLink
+                                    to={item.status === 'IN_PROGRESS' ? `/livro/${item.bookId}/reader` : '#'}
+                                    onClick={(e) => {
+                                        if (item.status !== 'IN_PROGRESS') {
+                                            e.preventDefault() // cancela a navegação
+                                        }
+                                    }}
+                                >
                                     <Button variant={'blue'} size={'sm'} disabled={item.status != 'IN_PROGRESS'}>
                                         Ler livro
                                     </Button>
@@ -61,7 +68,7 @@ export function BorrowedBooksTable({ items, admin }: Props) {
                         </TableCell>
                         {!admin && (
                             <TableCell>
-                                <BookReviewDialog book_id={item.book.id}>
+                                <BookReviewDialog book_id={item.bookId}>
                                     <Button variant={'outline'} size={'sm'} disabled={item.status == 'WAITING'}>
                                         Adicionar Review <Star size={14} className="ms-1" />
                                     </Button>

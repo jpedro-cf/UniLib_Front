@@ -5,13 +5,15 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { PaginationResponse } from '@/interfaces'
 import { api } from '@/config/axios'
 import { BookReviewSchema } from '@/components/books/BookReviewForm'
+import { BorrowBookFormSchema } from '@/components/books/BorrowBookForm'
 
 export const useBooks = (company_id?: string) => {
     const submit = async (): Promise<PaginationResponse<IBook>> => {
         const res = await api.get(`/books`, {
             params: {
                 size: 999,
-                companyId: company_id
+                companyId: company_id,
+                sort: 'createdAt,desc'
             }
         })
         return res.data
@@ -28,7 +30,11 @@ export const useBooks = (company_id?: string) => {
 
 export const useBorrowedBooks = (enabled: boolean) => {
     const submit = async (): Promise<PaginationResponse<IBorrowedBook>> => {
-        const res = await api.get(`/books/borrows`)
+        const res = await api.get(`/books/borrows`, {
+            params: {
+                size: 999
+            }
+        })
         return res.data
     }
 
@@ -199,17 +205,11 @@ export const useBookDeletion = () => {
     })
 }
 
-interface BorrowBookData {
-    book_id: string
-    release: Date
-    expiration: Date
-}
-
 export const useBorrowBook = () => {
-    const submit = async (data: BorrowBookData) => {
-        await api.post(`/books/${data.book_id}/borrow`, {
-            release: data.release ?? new Date(),
-            expiration: data.expiration ?? new Date()
+    const submit = async (data: BorrowBookFormSchema) => {
+        await api.post(`/books/${data.bookId}/borrow`, {
+            release: data.release,
+            expiration: data.expiration
         })
     }
 

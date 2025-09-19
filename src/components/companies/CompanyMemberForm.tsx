@@ -6,6 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form'
 import { useUsers } from '@/services/users'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { Button } from '../ui/button'
+import { useCompanyMemberMutation } from '@/services/companies'
 
 export const CompanyMemberFormSchema = z.object({
     company_id: z.string(),
@@ -26,7 +27,11 @@ export function CompanyMemberForm({ company_id, member }: Props) {
             role: member?.role
         }
     })
-    function onSubmit(values: z.infer<typeof CompanyMemberFormSchema>) {}
+    const { mutate, isPending } = useCompanyMemberMutation()
+
+    function onSubmit(values: z.infer<typeof CompanyMemberFormSchema>) {
+        mutate(values)
+    }
 
     const { data } = useUsers()
 
@@ -73,7 +78,7 @@ export function CompanyMemberForm({ company_id, member }: Props) {
                         </FormItem>
                     )}
                 />
-                <Button type="submit" className="mt-3">
+                <Button type="submit" className="mt-3" disabled={isPending}>
                     Salvar
                 </Button>
             </form>

@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { IBook } from '@/interfaces/Book'
-import { useBook, useBooks, useBorrowBook } from '@/services/books'
+import { useBook, useBooks } from '@/services/books'
 import { ICategory } from '@/interfaces/Category'
 import { SkeletonBook } from '@/components/skeleton/SkeletonBook'
 import { Reviews } from '@/components/book/Reviews'
@@ -13,14 +13,16 @@ import { useEffect } from 'react'
 import { env } from '@/config/env'
 import { calculateMean } from '@/lib/utils'
 import { Ratings } from '@/components/ui/rating'
+import { BorrowBookDialog } from '@/components/books/BorrowBookDialog'
+import { useAuth } from '@/context/auth-context'
 
 export const BookPage = () => {
     const { id } = useParams<{ id: IBook['id'] }>()
+    const { user } = useAuth()
     const navigate = useNavigate()
 
     const { data: book, isLoading, isRefetching, isSuccess, isError, refetch } = useBook(id!)
     const { data: companyBooks, refetch: refetchCompanyBooks } = useBooks(book?.company.id)
-    const { mutate, isPending } = useBorrowBook()
 
     useEffect(() => {
         if (!id) {
@@ -32,17 +34,6 @@ export const BookPage = () => {
 
     if (isLoading || isRefetching) {
         return <SkeletonBook />
-    }
-
-    function handleBorrow() {
-        if (!book) {
-            return
-        }
-        mutate({
-            book_id: book.id,
-            expiration: new Date(new Date().setDate(new Date().getDate() + 1000)),
-            release: new Date()
-        })
     }
 
     if (isError) {
@@ -104,15 +95,11 @@ export const BookPage = () => {
                                 ))}
                             </div>
                             <div className="flex my-8 gap-5">
-                                <Button
-                                    variant={'blue'}
-                                    size={'lg'}
-                                    className="w-auto"
-                                    onClick={handleBorrow}
-                                    disabled={isPending}
-                                >
-                                    Obter livro <ShoppingBag size={16} className="ms-3" />
-                                </Button>
+                                <BorrowBookDialog book={book}>
+                                    <Button variant={'blue'} size={'lg'} className="w-auto" disabled={!user}>
+                                        Obter livro <ShoppingBag size={16} className="ms-3" />
+                                    </Button>
+                                </BorrowBookDialog>
                             </div>
                             <CompanyInfo company={book.company} />
                         </div>

@@ -8,6 +8,7 @@ import { PaginationResponse } from '@/interfaces'
 import { api } from '@/config/axios'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/context/auth-context'
+import { CompanyMemberFormSchema } from '@/components/companies/CompanyMemberForm'
 
 export const useCompany = (id: string) => {
     const submit = async (): Promise<ICompany> => {
@@ -169,9 +170,47 @@ export const useRemoveCompanyMember = () => {
     return result
 }
 
+export function useCompanyMemberMutation() {
+    const queryClient = useQueryClient()
+
+    const submit = async (data: z.infer<typeof CompanyMemberFormSchema>): Promise<ICompanyMember> => {
+        const res = await api.post(`/companies/${data.company_id}/members`, {
+            memberId: data.member_id,
+            role: data.role
+        })
+        return res.data
+    }
+
+    return useMutation({
+        mutationFn: submit,
+        onSuccess: (data) => {
+            toast({
+                title: 'Sucesso!',
+                variant: 'default',
+                description: <div>Membro adicionado com sucesso.</div>
+            })
+
+            queryClient.setQueryData(['company_members'], (oldData: ICompanyMember[]) => {
+                return [data, ...oldData]
+            })
+        },
+        onError: () => {
+            toast({
+                title: 'Erro!',
+                variant: 'destructive',
+                description: <div>Ocorreu um erro ao adicionar o membro.</div>
+            })
+        }
+    })
+}
+
 export const useCompanyBorrowedBooks = (company_id: string) => {
     const submit = async (): Promise<PaginationResponse<IBorrowedBook>> => {
-        const res = await api.get(`/books/borrows?companyId=${company_id}`)
+        const res = await api.get(`/books/borrows?companyId=${company_id}`, {
+            params: {
+                size: 999
+            }
+        })
         return res.data
     }
 

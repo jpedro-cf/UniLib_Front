@@ -41,8 +41,8 @@ export function CurrentUserInfo() {
                                 {auth.user.name.split('')[0].toUpperCase()}
                             </AvatarFallback>
                         </Avatar>
-                        <div className="flex flex-col items-start">
-                            <span className="text-sm font-semibold">{auth.user.name}</span>
+                        <div className="flex flex-col items-start max-w-[170px] overflow-hidden overflow-ellipsis break-words">
+                            <span className="text-sm text-start font-semibold">{auth.user.name}</span>
                             <span className="text-xs">{auth.user.email}</span>
                         </div>
                     </button>
@@ -53,7 +53,7 @@ export function CurrentUserInfo() {
                     <DropdownMenuGroup>
                         <DropdownMenuItem>
                             <NavLink to={'/perfil'} className={'w-full'}>
-                                Perfil
+                                Atualizar Perfil
                             </NavLink>
                         </DropdownMenuItem>
                         <DropdownMenuItem>

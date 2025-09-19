@@ -32,10 +32,11 @@ export type BorrowStatus = 'COMPLETED' | 'IN_PROGRESS' | 'WAITING'
 
 export interface IBorrowedBook {
     id: string
-    book: IBook
+    bookId: string
+    bookTitle: string
     username: string
     email: string
     status: BorrowStatus
-    expires_at: Date
-    release_at: Date
+    expiresAt: Date
+    releaseAt?: Date
 }

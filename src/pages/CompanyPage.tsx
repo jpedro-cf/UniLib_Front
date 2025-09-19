@@ -43,7 +43,6 @@ export const CompanyPage = () => {
                 <TabsList>
                     <TabsTrigger value="details">Detalhes</TabsTrigger>
                     <TabsTrigger value="books">Livros</TabsTrigger>
-                    <TabsTrigger value="groups">Turmas</TabsTrigger>
                     <TabsTrigger value="borrowed">Livros Emprestados</TabsTrigger>
                 </TabsList>
                 <TabsContent value="details">
@@ -53,7 +52,6 @@ export const CompanyPage = () => {
                 <TabsContent value="books">
                     <CompanyBooks id={company.id} />
                 </TabsContent>
-                <TabsContent value="groups">Turmas</TabsContent>
                 <TabsContent value="borrowed">
                     <BorrowedBooks company_id={company.id} />
                 </TabsContent>
