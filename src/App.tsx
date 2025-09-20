@@ -1,41 +1,93 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import { Layout } from './components/global/Layout'
 import { BooksPage } from './pages/BooksPage'
 import { CategoriesPage } from './pages/CategoriesPage'
 import { BookPage } from './pages/BookPage'
 import { CompanyPage } from './pages/CompanyPage'
 import { Reader } from './pages/Reader'
-import ProtectedRoute from './components/global/ProtectedRoute'
-
-const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Layout children={<BooksPage />} />
-    },
-    {
-        path: '/categorias',
-        element: <Layout children={<CategoriesPage />} />
-    },
-    {
-        path: '/livro/:id',
-        element: <Layout children={<BookPage />} />
-    },
-    {
-        path: '/admin/empresas/:id',
-        element: (
-            <ProtectedRoute roles={['admin', 'manager', 'editor']}>
-                <Layout children={<CompanyPage />} />
-            </ProtectedRoute>
-        )
-    },
-    {
-        path: '/livro/:id/reader',
-        element: <Layout children={<Reader />} />
-    }
-])
+import { PersistAuth } from './components/global/PersistAuth'
+import { MyBooksPage } from './pages/MyBooksPage'
+import { LoginPage } from './pages/LoginPage'
+import { RegisterPage } from './pages/RegisterPage'
+import { ReviewsPage } from './pages/ReviewsPage'
+import { ProfilePage } from './pages/ProfilePage'
 
 function App() {
-    return <RouterProvider router={router} />
+    return (
+        <Router>
+            <Routes>
+                <Route element={<PersistAuth />}>
+                    <Route
+                        path="/"
+                        element={
+                            <Layout>
+                                <BooksPage />
+                            </Layout>
+                        }
+                    />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/criar-conta" element={<RegisterPage />} />
+                    <Route
+                        path="/categorias"
+                        element={
+                            <Layout>
+                                <CategoriesPage />
+                            </Layout>
+                        }
+                    />
+
+                    <Route
+                        path="/livro/:id"
+                        element={
+                            <Layout>
+                                <BookPage />
+                            </Layout>
+                        }
+                    />
+                    <Route
+                        path="/meus-livros"
+                        element={
+                            <Layout>
+                                <MyBooksPage />
+                            </Layout>
+                        }
+                    />
+                    <Route
+                        path="/minhas-reviews"
+                        element={
+                            <Layout>
+                                <ReviewsPage />
+                            </Layout>
+                        }
+                    />
+                    <Route
+                        path="/livro/:id/reader"
+                        element={
+                            <Layout>
+                                <Reader />
+                            </Layout>
+                        }
+                    />
+                    <Route
+                        path="/admin/empresas/:id"
+                        element={
+                            <Layout>
+                                <CompanyPage />
+                            </Layout>
+                        }
+                    />
+                    <Route
+                        path="/perfil"
+                        element={
+                            <Layout>
+                                <ProfilePage />
+                            </Layout>
+                        }
+                    />
+                </Route>
+            </Routes>
+        </Router>
+    )
 }
 
 export default App

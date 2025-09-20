@@ -1,25 +1,42 @@
 import { ICategory } from './Category'
+import { ICompany } from './Company'
+import { IUser } from './User'
 
 export interface IBookReview {
     id: string
-    name: number
+    user: IUser
     rating: number
     comment: string
-    date: Date
+    createdAt: Date
 }
 
 export interface IBook {
     id: string
     title: string
-    available: boolean
-    rating: number
     categories: ICategory[]
     reviews: IBookReview[]
     description: string
     image: string
     pdf: string
-    company_id: string
-    has_ebook: boolean
-    created_at: Date
-    updated_at: Date
+    company: ICompany
+    createdAt: Date
+    updatedAt: Date
+}
+
+export interface IReadBookResponse {
+    url: string
+    book: IBook
+}
+
+export type BorrowStatus = 'COMPLETED' | 'IN_PROGRESS' | 'WAITING'
+
+export interface IBorrowedBook {
+    id: string
+    bookId: string
+    bookTitle: string
+    username: string
+    email: string
+    status: BorrowStatus
+    expiresAt: Date
+    releaseAt?: Date
 }

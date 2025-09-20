@@ -1,6 +1,37 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+    return twMerge(clsx(inputs))
+}
+
+export function formatFileSize(bytes: number, decimalPoint = 2): string {
+    if (bytes === 0) {
+        return '0 Bytes'
+    }
+
+    const k = 1024
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(decimalPoint)) + ' ' + sizes[i]
+}
+
+export async function urlToFile(url: string): Promise<File> {
+    const response = await fetch(url)
+    const blob = await response.blob()
+
+    const filename = url.split('/').pop() || 'file'
+
+    return new File([blob], filename, { type: blob.type })
+}
+
+export function calculateMean(numbers: number[]) {
+    if (!Array.isArray(numbers) || numbers.length === 0) {
+        return 0
+    }
+
+    const sum = numbers.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+    const mean = sum / numbers.length
+    return mean
 }

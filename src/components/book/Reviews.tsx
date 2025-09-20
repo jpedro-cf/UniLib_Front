@@ -14,11 +14,13 @@ export const Reviews = ({ reviews }: Props) => {
                 {reviews.map((review: IBookReview) => (
                     <div key={review.id} className="py-3">
                         <div className="flex justify-between items-center">
-                            <div className="text-gray-800 font-medium">{review.name}</div>
+                            <div className="text-gray-800 font-medium">{review.user.name}</div>
                             <Ratings rating={review.rating} variant="yellow" />
                         </div>
-                        <div className="text-gray-500 text-sm mb-2">{format(review.date, 'dd MMMM yyy')}</div>
-                        <p className="text-gray-700">{review.comment}</p>
+                        <div className="text-gray-500 text-sm mb-2">
+                            {format(new Date(review.createdAt), 'dd MMMM yyy')}
+                        </div>
+                        <p className="text-gray-700 break-words">{review.comment}</p>
                     </div>
                 ))}
             </div>

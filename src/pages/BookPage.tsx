@@ -7,32 +7,36 @@ import { Reviews } from '@/components/book/Reviews'
 import { RelatedBooks } from '@/components/book/RelatedBooks'
 import { CompanyInfo } from '@/components/book/CompanyInfo'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { DoorOpen, FileWarningIcon, Heart, ShoppingBag } from 'lucide-react'
+import { DoorOpen, FileWarningIcon, ShoppingBag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { toast } from '@/components/ui/use-toast'
 import { useEffect } from 'react'
+import { env } from '@/config/env'
+import { calculateMean } from '@/lib/utils'
+import { Ratings } from '@/components/ui/rating'
+import { BorrowBookDialog } from '@/components/books/BorrowBookDialog'
+import { useAuth } from '@/context/auth-context'
 
 export const BookPage = () => {
     const { id } = useParams<{ id: IBook['id'] }>()
+    const { user } = useAuth()
     const navigate = useNavigate()
 
-    if (!id) {
-        navigate('/', { replace: true })
-    }
-
-    const book = useBook(id!)
-    const books = useBooks()
+    const { data: book, isLoading, isRefetching, isSuccess, isError, refetch } = useBook(id!)
+    const { data: companyBooks, refetch: refetchCompanyBooks } = useBooks(book?.company.id)
 
     useEffect(() => {
-        book.refetch()
-        books.refetch()
+        if (!id) {
+            navigate('/', { replace: true })
+        }
+        refetch()
+        refetchCompanyBooks()
     }, [id])
 
-    if (book.isLoading || book.isRefetching) {
+    if (isLoading || isRefetching) {
         return <SkeletonBook />
     }
 
-    if (book.isError) {
+    if (isError) {
         return (
             <Alert>
                 <FileWarningIcon size={20} />
@@ -49,45 +53,39 @@ export const BookPage = () => {
 
     return (
         <>
-            {book.isSuccess && book.data && (
+            {isSuccess && book && (
                 <>
                     <div className="mx-auto bg-white rounded-lg shadow-md p-8 grid grid-cols-1 lg:grid-cols-3 gap-5">
                         <div>
                             <img
-                                src={book.data.image}
-                                alt={book.data.title}
+                                src={`${env.storage_url}/${book.image}`}
+                                alt={book.title}
                                 className="w-full h-[300px] lg:h-full object-cover rounded-lg"
                             />
                         </div>
                         <div className="lg:col-span-2">
-                            <h1 className="text-3xl font-semibold mt-4">{book.data.title}</h1>
+                            <h1 className="text-3xl font-semibold mt-4">{book.title}</h1>
                             <p className="text-sm mt-2">
-                                {book.data.available ? (
+                                {book ? (
                                     <span className="text-green-600">Disponível</span>
                                 ) : (
                                     <span className="text-red-600">Indisponível</span>
                                 )}
                             </p>
                             <div className="flex items-center mt-2">
-                                <p className="text-yellow-500 font-semibold">{book.data.rating} / 5</p>
+                                <p className="text-yellow-500 font-semibold">
+                                    {calculateMean(book.reviews.map((r) => r.rating))} / 5
+                                </p>
                                 <div className="ml-2 flex">
-                                    {Array.from({ length: 5 }, (_, i) => (
-                                        <svg
-                                            key={i}
-                                            className={`w-5 h-5 ${
-                                                i < book.data.rating ? 'text-yellow-400' : 'text-gray-300'
-                                            }`}
-                                            fill="currentColor"
-                                            viewBox="0 0 20 20"
-                                        >
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.386 4.26a1 1 0 00.95.69h4.488c.97 0 1.371 1.24.588 1.81l-3.63 2.57a1 1 0 00-.363 1.118l1.386 4.26c.3.921-.755 1.688-1.539 1.118l-3.63-2.57a1 1 0 00-1.175 0l-3.63 2.57c-.783.57-1.838-.197-1.539-1.118l1.386-4.26a1 1 0 00-.363-1.118l-3.63-2.57c-.783-.57-.382-1.81.588-1.81h4.488a1 1 0 00.95-.69l1.386-4.26z" />
-                                        </svg>
-                                    ))}
+                                    <Ratings
+                                        rating={calculateMean(book.reviews.map((r) => r.rating))}
+                                        variant="yellow"
+                                    />
                                 </div>
                             </div>
-                            <p className="mt-4 text-gray-700">{book.data.description}</p>
+                            <p className="mt-4 text-gray-700">{book.description}</p>
                             <div className="flex flex-wrap mt-4">
-                                {book.data.categories.map((category: ICategory, index: number) => (
+                                {book.categories.map((category: ICategory, index: number) => (
                                     <span
                                         key={index}
                                         className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
@@ -97,42 +95,19 @@ export const BookPage = () => {
                                 ))}
                             </div>
                             <div className="flex my-8 gap-5">
-                                <Button
-                                    variant={'blue'}
-                                    size={'lg'}
-                                    className="w-auto"
-                                    onClick={() =>
-                                        toast({
-                                            variant: 'default',
-                                            title: 'Solicitado!',
-                                            description: 'Livro solicitado para empréstimo, aguarde a confirmação.'
-                                        })
-                                    }
-                                >
-                                    Obter livro <ShoppingBag size={16} className="ms-3" />
-                                </Button>
-                                <Button
-                                    variant={'outline'}
-                                    size={'lg'}
-                                    className="text-destructive hover:text-slate-100 hover:border-destructive  hover:bg-destructive w-auto"
-                                    onClick={() =>
-                                        toast({
-                                            variant: 'default',
-                                            title: 'Favoritado!',
-                                            description: 'Livro favoritado com sucesso.'
-                                        })
-                                    }
-                                >
-                                    Favoritar <Heart size={16} className="ms-3" />
-                                </Button>
+                                <BorrowBookDialog book={book}>
+                                    <Button variant={'blue'} size={'lg'} className="w-auto" disabled={!user}>
+                                        Obter livro <ShoppingBag size={16} className="ms-3" />
+                                    </Button>
+                                </BorrowBookDialog>
                             </div>
-                            <CompanyInfo />
+                            <CompanyInfo company={book.company} />
                         </div>
                     </div>
-                    <Reviews reviews={book.data.reviews} />
-                    {/* Mudar isso depois, colocar um isLoading... */}
-                    <RelatedBooks tituloSecao="Livros da mesma empresa" books={books.data} />
-                    <RelatedBooks tituloSecao="Livros da mesma categoria" books={books.data} />
+                    {book.reviews.length > 0 && <Reviews reviews={book.reviews} />}
+                    {(companyBooks?.content.length ?? 0) > 0 && (
+                        <RelatedBooks tituloSecao="Livros da mesma empresa" books={companyBooks?.content ?? []} />
+                    )}
                 </>
             )}
         </>

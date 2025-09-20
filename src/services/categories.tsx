@@ -1,17 +1,94 @@
-import { env } from '@/config/env'
-import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
+import { CategoryFormSchema } from '@/components/categories/CategoryForm'
+import { toast } from '@/components/ui/use-toast'
+import { api } from '@/config/axios'
+import { PaginationResponse } from '@/interfaces'
+import { ICategory } from '@/interfaces/Category'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+
 export const useCategories = () => {
-    const submit = async () => {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        const res = await axios.get(`${env.base_url}/categories`)
+    const submit = async (): Promise<PaginationResponse<ICategory>> => {
+        const res = await api.get('/categories', {
+            params: {
+                size: 999
+            }
+        })
         return res.data
     }
 
     const results = useQuery({
         queryKey: ['categories'],
-        queryFn: submit
+        queryFn: submit,
+        refetchOnWindowFocus: false
     })
 
     return results
+}
+
+export function useCategoryMutation() {
+    const queryClient = useQueryClient()
+
+    const submit = async (data: CategoryFormSchema): Promise<ICategory> => {
+        const res = await api.post('/categories', {
+            title: data.title,
+            description: data.description
+        })
+
+        return res.data
+    }
+
+    return useMutation({
+        mutationFn: submit,
+        onSuccess: (data, variables) => {
+            toast({
+                title: 'Sucesso!',
+                variant: 'default',
+                description: <div>Categoria publicada com sucesso.</div>
+            })
+            queryClient.setQueryData(['categories'], (oldData: PaginationResponse<ICategory>) => {
+                return {
+                    ...oldData,
+                    content: [data, ...oldData.content]
+                }
+            })
+        },
+        onError: () => {
+            toast({
+                title: 'Erro!',
+                variant: 'destructive',
+                description: <div>Ocorreu um erro ao publicar a categoria.</div>
+            })
+        }
+    })
+}
+
+export function useCategoryDeletion() {
+    const queryClient = useQueryClient()
+
+    const submit = async (id: string): Promise<void> => {
+        await api.delete(`/categories/${id}`)
+    }
+
+    return useMutation({
+        mutationFn: submit,
+        onSuccess: (data, variables) => {
+            toast({
+                title: 'Sucesso!',
+                variant: 'default',
+                description: <div>Categoria deletada com sucesso.</div>
+            })
+            queryClient.setQueryData(['categories'], (oldData: PaginationResponse<ICategory>) => {
+                return {
+                    ...oldData,
+                    content: oldData.content.filter((c) => c.id != variables)
+                }
+            })
+        },
+        onError: () => {
+            toast({
+                title: 'Erro!',
+                variant: 'destructive',
+                description: <div>Ocorreu um erro ao deletar a categoria.</div>
+            })
+        }
+    })
 }
