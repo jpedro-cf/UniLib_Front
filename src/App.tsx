@@ -14,7 +14,7 @@ import { ProfilePage } from './pages/ProfilePage'
 
 function App() {
     return (
-        <Router>
+        <Router basename="/UniLib_Front/">
             <Routes>
                 <Route element={<PersistAuth />}>
                     <Route
