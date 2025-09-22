@@ -162,7 +162,6 @@ export function BookForm({ book }: Props) {
                         <FormItem>
                             <FormLabel>PDF: {field.value?.name || book?.pdf}</FormLabel>
                             <DragDropComponent
-                                initialPreview={book ? `${env.storage_url}/${book.pdf}` : undefined}
                                 onFileSelect={handlePdfSelect}
                                 className={`w-full h-[150px] ${fieldState.error && 'bg-red-50 border-red-400'}`}
                             >
