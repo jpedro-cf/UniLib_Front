@@ -43,9 +43,10 @@ export const CompanyFormSchema = z
 
 interface Props {
     company?: ICompany
+    closeDialog?: () => void
 }
 
-export const CompanyForm = ({ company }: Props) => {
+export const CompanyForm = ({ company, closeDialog }: Props) => {
     const form = useForm<z.infer<typeof CompanyFormSchema>>({
         resolver: zodResolver(CompanyFormSchema),
         defaultValues: {
@@ -59,7 +60,9 @@ export const CompanyForm = ({ company }: Props) => {
     const { mutate, isPending } = useCompanyMutation()
 
     function onSubmit(values: z.infer<typeof CompanyFormSchema>) {
-        mutate(values)
+        mutate(values, {
+            onSuccess: () => closeDialog?.()
+        })
     }
 
     function handleFileSelect(file: File | null) {

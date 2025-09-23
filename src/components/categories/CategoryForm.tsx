@@ -18,8 +18,9 @@ export type CategoryFormSchema = z.infer<typeof categoryFormSchema>
 
 interface Props {
     category?: ICategory
+    closeDialog?: () => void
 }
-export function CategoryForm({ category }: Props) {
+export function CategoryForm({ category, closeDialog }: Props) {
     const form = useForm<CategoryFormSchema>({
         resolver: zodResolver(categoryFormSchema),
         defaultValues: {
@@ -32,7 +33,9 @@ export function CategoryForm({ category }: Props) {
     const { mutate, isPending } = useCategoryMutation()
 
     function handleSubmit(data: CategoryFormSchema) {
-        mutate(data)
+        mutate(data, {
+            onSuccess: () => closeDialog?.()
+        })
     }
 
     return (

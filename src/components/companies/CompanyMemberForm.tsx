@@ -17,8 +17,9 @@ export const CompanyMemberFormSchema = z.object({
 interface Props {
     company_id: string
     member?: ICompanyMember
+    closeDialog?: () => void
 }
-export function CompanyMemberForm({ company_id, member }: Props) {
+export function CompanyMemberForm({ company_id, member, closeDialog }: Props) {
     const form = useForm<z.infer<typeof CompanyMemberFormSchema>>({
         resolver: zodResolver(CompanyMemberFormSchema),
         defaultValues: {
@@ -30,7 +31,9 @@ export function CompanyMemberForm({ company_id, member }: Props) {
     const { mutate, isPending } = useCompanyMemberMutation()
 
     function onSubmit(values: z.infer<typeof CompanyMemberFormSchema>) {
-        mutate(values)
+        mutate(values, {
+            onSuccess: () => closeDialog?.()
+        })
     }
 
     const { data } = useUsers()

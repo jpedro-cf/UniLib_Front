@@ -75,8 +75,9 @@ export type BookFormSchema = z.infer<typeof bookFormSchema>
 
 interface Props {
     book?: IBook
+    closeDialog?: () => void
 }
-export function BookForm({ book }: Props) {
+export function BookForm({ book, closeDialog }: Props) {
     const { id: companyId } = useParams()
     const { data: categories } = useCategories()
 
@@ -113,7 +114,9 @@ export function BookForm({ book }: Props) {
     }
 
     function handleSubmit(data: BookFormSchema) {
-        mutate(data)
+        mutate(data, {
+            onSuccess: () => closeDialog?.()
+        })
     }
 
     function handleDelete() {
@@ -121,7 +124,9 @@ export function BookForm({ book }: Props) {
             return
         }
 
-        deleteBook(book.id)
+        deleteBook(book.id, {
+            onSuccess: () => closeDialog?.()
+        })
     }
 
     return (

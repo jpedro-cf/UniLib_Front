@@ -17,8 +17,9 @@ export type BookReviewSchema = z.infer<typeof bookReviewFormSchema>
 
 interface Props {
     book_id: string
+    closeDialog?: () => void
 }
-export function BookReviewForm({ book_id }: Props) {
+export function BookReviewForm({ book_id, closeDialog }: Props) {
     const form = useForm<BookReviewSchema>({
         resolver: zodResolver(bookReviewFormSchema),
         defaultValues: { book_id: book_id }
@@ -26,7 +27,9 @@ export function BookReviewForm({ book_id }: Props) {
     const { mutate, isPending } = useReviewMutation()
 
     function handleSubmit(data: BookReviewSchema) {
-        mutate(data)
+        mutate(data, {
+            onSuccess: () => closeDialog?.()
+        })
     }
     return (
         <Form {...form}>

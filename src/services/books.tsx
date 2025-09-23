@@ -7,6 +7,7 @@ import { api } from '@/config/axios'
 import { BookReviewSchema } from '@/components/books/BookReviewForm'
 import { BorrowBookFormSchema } from '@/components/books/BorrowBookForm'
 import { AxiosError } from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 export const useBooks = (company_id?: string) => {
     const submit = async (): Promise<PaginationResponse<IBook>> => {
@@ -207,6 +208,8 @@ export const useBookDeletion = () => {
 }
 
 export const useBorrowBook = () => {
+    const navigate = useNavigate()
+
     const submit = async (data: BorrowBookFormSchema) => {
         await api.post(`/books/${data.bookId}/borrow`, {
             release: data.release,
@@ -222,6 +225,7 @@ export const useBorrowBook = () => {
                 variant: 'default',
                 description: <div>Livro solicitado com sucesso, aguarde a confirmação.</div>
             })
+            navigate(`/meus-livros`, { replace: true })
         },
         onError: (e: AxiosError<{ detail?: string }>) => {
             toast({
