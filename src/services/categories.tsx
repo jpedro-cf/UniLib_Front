@@ -4,6 +4,7 @@ import { api } from '@/config/axios'
 import { PaginationResponse } from '@/interfaces'
 import { ICategory } from '@/interfaces/Category'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 
 export const useCategories = () => {
     const submit = async (): Promise<PaginationResponse<ICategory>> => {
@@ -38,7 +39,7 @@ export function useCategoryMutation() {
 
     return useMutation({
         mutationFn: submit,
-        onSuccess: (data, variables) => {
+        onSuccess: (data) => {
             toast({
                 title: 'Sucesso!',
                 variant: 'default',
@@ -51,11 +52,11 @@ export function useCategoryMutation() {
                 }
             })
         },
-        onError: () => {
+        onError: (e: AxiosError<{ detail?: string }>) => {
             toast({
                 title: 'Erro!',
                 variant: 'destructive',
-                description: <div>Ocorreu um erro ao publicar a categoria.</div>
+                description: e.response?.data.detail ?? 'Ocorreu um erro inesperado.'
             })
         }
     })
@@ -83,11 +84,11 @@ export function useCategoryDeletion() {
                 }
             })
         },
-        onError: () => {
+        onError: (e: AxiosError<{ detail?: string }>) => {
             toast({
                 title: 'Erro!',
                 variant: 'destructive',
-                description: <div>Ocorreu um erro ao deletar a categoria.</div>
+                description: e.response?.data.detail ?? 'Ocorreu um erro inesperado.'
             })
         }
     })

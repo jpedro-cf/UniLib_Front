@@ -6,6 +6,7 @@ import { ICurrentUserData, IUser } from '@/interfaces/User'
 import { LoginFormSchema } from '@/pages/LoginPage'
 import { RegisterFormSchema } from '@/pages/RegisterPage'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 export const useUsers = () => {
@@ -55,11 +56,11 @@ export const useLoginMutation = () => {
             setUser(data)
             navigate('/', { replace: true })
         },
-        onError: () => {
+        onError: (e: AxiosError<{ detail?: string }>) => {
             toast({
                 title: 'Erro!',
                 variant: 'destructive',
-                description: <div>Ocorreu um erro ao realizar o login.</div>
+                description: e.response?.data.detail ?? 'Ocorreu um erro inesperado.'
             })
         }
     })
@@ -79,11 +80,11 @@ export const useLogoutMutation = () => {
             setUser(null)
             navigate('/', { replace: true })
         },
-        onError: () => {
+        onError: (e: AxiosError<{ detail?: string }>) => {
             toast({
                 title: 'Erro!',
                 variant: 'destructive',
-                description: <div>Ocorreu um erro ao realizar o logout.</div>
+                description: e.response?.data.detail ?? 'Ocorreu um erro inesperado.'
             })
         }
     })
@@ -107,11 +108,11 @@ export const useRegisterMutation = () => {
             })
             navigate('/login', { replace: true })
         },
-        onError: () => {
+        onError: (e: AxiosError<{ detail?: string }>) => {
             toast({
                 title: 'Erro!',
                 variant: 'destructive',
-                description: <div>Ocorreu um erro ao criar a conta.</div>
+                description: e.response?.data.detail ?? 'Ocorreu um erro inesperado.'
             })
         }
     })
@@ -140,11 +141,11 @@ export function useUserMutation() {
             })
             setUser(data)
         },
-        onError: () => {
+        onError: (e: AxiosError<{ detail?: string }>) => {
             toast({
                 title: 'Erro!',
                 variant: 'destructive',
-                description: <div>Ocorreu um erro ao atualizar o conta.</div>
+                description: e.response?.data.detail ?? 'Ocorreu um erro inesperado'
             })
         }
     })

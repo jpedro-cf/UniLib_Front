@@ -3,6 +3,7 @@ import { IBookReview } from '@/interfaces'
 import { Ratings } from '../ui/rating'
 import { Button } from '../ui/button'
 import { useReviewDeletion } from '@/services/books'
+import { format } from 'date-fns'
 interface Props {
     items: IBookReview[]
 }
@@ -30,7 +31,7 @@ export function ReviewsTable({ items }: Props) {
                                 {item.comment.length > 100 ? item.comment.slice(0, 100).concat('...') : item.comment}
                             </div>
                         </TableCell>
-                        <TableCell>{new Date(item.createdAt).toString()}</TableCell>
+                        <TableCell>{format(new Date(item.createdAt), 'PPP')}</TableCell>
                         <TableCell>
                             <Button variant={'destructive'} disabled={isPending} onClick={() => mutate(item.id)}>
                                 Deletar

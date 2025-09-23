@@ -17,9 +17,7 @@ export const Reviews = ({ reviews }: Props) => {
                             <div className="text-gray-800 font-medium">{review.user.name}</div>
                             <Ratings rating={review.rating} variant="yellow" />
                         </div>
-                        <div className="text-gray-500 text-sm mb-2">
-                            {format(new Date(review.createdAt), 'dd MMMM yyy')}
-                        </div>
+                        <div className="text-gray-500 text-sm mb-2">{format(new Date(review.createdAt), 'PPP')}</div>
                         <p className="text-gray-700 break-words">{review.comment}</p>
                     </div>
                 ))}

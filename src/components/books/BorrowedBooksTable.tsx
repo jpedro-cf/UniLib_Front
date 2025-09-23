@@ -7,6 +7,7 @@ import { NavLink } from 'react-router-dom'
 import { BorrowedBookStatus } from './BorrowedBookStatus'
 import { BorrowAction, useBorrowedBookMutation } from '@/services/books'
 import { BookReviewDialog } from '../dialogs/BookReviewDialog'
+import { format } from 'date-fns'
 
 interface Props {
     admin: boolean
@@ -37,8 +38,8 @@ export function BorrowedBooksTable({ items, admin }: Props) {
                         <TableCell>
                             <BorrowedBookStatus status={item.status} />
                         </TableCell>
-                        <TableCell>{item.releaseAt ? new Date(item.releaseAt).toDateString() : 'Indefinido'}</TableCell>
-                        <TableCell>{new Date(item.expiresAt).toDateString()}</TableCell>
+                        <TableCell>{item.releaseAt ? format(new Date(item.releaseAt), 'PPP') : 'Indefinido'}</TableCell>
+                        <TableCell>{format(new Date(item.expiresAt), 'PPP')}</TableCell>
                         <TableCell>
                             {admin ? (
                                 <DropdownMenu>

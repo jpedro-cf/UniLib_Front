@@ -9,6 +9,7 @@ import { api } from '@/config/axios'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/context/auth-context'
 import { CompanyMemberFormSchema } from '@/components/companies/CompanyMemberForm'
+import { AxiosError } from 'axios'
 
 export const useCompany = (id: string) => {
     const submit = async (): Promise<ICompany> => {
@@ -107,12 +108,11 @@ export function useCompanyMutation() {
             }
             navigate(`/admin/empresas/${data.id}`, { replace: true })
         },
-        onError: (e) => {
-            console.log(e)
+        onError: (e: AxiosError<{ detail?: string }>) => {
             toast({
                 title: 'Erro!',
                 variant: 'destructive',
-                description: <div>Ocorreu um erro ao publicar a empresa.</div>
+                description: e.response?.data.detail ?? 'Ocorreu um erro inesperado.'
             })
         }
     })
@@ -158,11 +158,11 @@ export const useRemoveCompanyMember = () => {
                 return oldData.filter((m) => m.id != variables.member_id)
             })
         },
-        onError: () => {
+        onError: (e: AxiosError<{ detail?: string }>) => {
             toast({
                 title: 'Erro!',
                 variant: 'destructive',
-                description: <div>Ocorreu um erro ao remover o membro.</div>
+                description: e.response?.data.detail ?? 'Ocorreu um erro inesperado.'
             })
         }
     })
@@ -194,11 +194,11 @@ export function useCompanyMemberMutation() {
                 return [data, ...oldData]
             })
         },
-        onError: () => {
+        onError: (e: AxiosError<{ detail?: string }>) => {
             toast({
                 title: 'Erro!',
                 variant: 'destructive',
-                description: <div>Ocorreu um erro ao adicionar o membro.</div>
+                description: e.response?.data.detail ?? 'Ocorreu um erro inesperado.'
             })
         }
     })
@@ -242,11 +242,11 @@ export function useCompanyDeletion() {
             }
             navigate('/', { replace: true })
         },
-        onError: () => {
+        onError: (e: AxiosError<{ detail?: string }>) => {
             toast({
                 title: 'Erro!',
                 variant: 'destructive',
-                description: <div>Ocorreu um erro ao deletar a empresa.</div>
+                description: e.response?.data.detail ?? 'Ocorreu um erro inesperado.'
             })
         }
     })

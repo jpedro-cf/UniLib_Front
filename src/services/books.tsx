@@ -6,6 +6,7 @@ import { PaginationResponse } from '@/interfaces'
 import { api } from '@/config/axios'
 import { BookReviewSchema } from '@/components/books/BookReviewForm'
 import { BorrowBookFormSchema } from '@/components/books/BorrowBookForm'
+import { AxiosError } from 'axios'
 
 export const useBooks = (company_id?: string) => {
     const submit = async (): Promise<PaginationResponse<IBook>> => {
@@ -163,11 +164,11 @@ export const useBookMutation = () => {
                 }
             })
         },
-        onError: () => {
+        onError: (e: AxiosError<{ detail?: string }>) => {
             toast({
                 title: 'Erro!',
                 variant: 'destructive',
-                description: <div>Ocorreu um erro ao publicar o livro.</div>
+                description: e.response?.data.detail ?? 'Ocorreu um erro inesperado.'
             })
         }
     })
@@ -195,11 +196,11 @@ export const useBookDeletion = () => {
                 }
             })
         },
-        onError: () => {
+        onError: (e: AxiosError<{ detail?: string }>) => {
             toast({
                 title: 'Erro!',
                 variant: 'destructive',
-                description: <div>Ocorreu um erro ao deletar o livro.</div>
+                description: e.response?.data?.detail ?? 'Ocorreu um erro inesperado.'
             })
         }
     })
@@ -222,11 +223,11 @@ export const useBorrowBook = () => {
                 description: <div>Livro solicitado com sucesso, aguarde a confirmação.</div>
             })
         },
-        onError: () => {
+        onError: (e: AxiosError<{ detail?: string }>) => {
             toast({
                 title: 'Erro!',
                 variant: 'destructive',
-                description: <div>Ocorreu um erro ao solicitar o livro.</div>
+                description: e.response?.data.detail ?? 'Ocorreu um erro inesperado.'
             })
         }
     })
@@ -280,11 +281,11 @@ export const useBorrowedBookMutation = () => {
                 }
             })
         },
-        onError: () => {
+        onError: (e: AxiosError<{ detail?: string }>) => {
             toast({
                 title: 'Erro!',
                 variant: 'destructive',
-                description: <div>Ocorreu um erro ao realizar essa ação.</div>
+                description: e.response?.data.detail ?? 'Ocorreu um erro inesperado.'
             })
         }
     })
@@ -309,11 +310,11 @@ export const useReviewMutation = () => {
                 description: <div>Review adicionada com sucesso.</div>
             })
         },
-        onError: () => {
+        onError: (e: AxiosError<{ detail?: string }>) => {
             toast({
                 title: 'Erro!',
                 variant: 'destructive',
-                description: <div>Ocorreu um erro ao adicionar a review.</div>
+                description: e.response?.data.detail ?? 'Ocorreu um erro inesperado.'
             })
         }
     })
@@ -338,11 +339,11 @@ export const useReviewDeletion = () => {
                 return oldData.filter((r) => r.id != variables)
             })
         },
-        onError: () => {
+        onError: (e: AxiosError<{ detail?: string }>) => {
             toast({
                 title: 'Erro!',
                 variant: 'destructive',
-                description: <div>Ocorreu um erro ao deletar a review.</div>
+                description: e.response?.data.detail ?? 'Ocorreu um erro inesperado.'
             })
         }
     })
