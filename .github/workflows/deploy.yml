@@ -6,6 +6,16 @@ on:
         branches:
             - master
             - main
+    workflow_call:
+        inputs:
+            VITE_API_URL:
+                required: true
+                type: string
+                description: 'The api url'
+            VITE_STORAGE_URL:
+                required: true
+                type: string
+                description: 'The storage url'
 
 jobs:
     build-deploy:
@@ -21,9 +31,6 @@ jobs:
 
             - name: Install Dependencies
               run: npm install
-
-            - name: Test env vars
-              run: echo "Test ${{vars.TEST_VAR}}"
 
             - name: Build the App
               env:
