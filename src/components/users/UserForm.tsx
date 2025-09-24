@@ -44,14 +44,14 @@ export function UserForm({ user }: Props) {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="grid grid-cols-2 gap-2">
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <FormField
                     control={form.control}
                     name="name"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Nome:</FormLabel>
-                            <Input placeholder="Nome:" {...field} />
+                            <Input placeholder="Nome:" {...field} className="w-full" />
                         </FormItem>
                     )}
                 />
@@ -61,20 +61,18 @@ export function UserForm({ user }: Props) {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Email:</FormLabel>
-                            <Input type="email" placeholder="Email:" {...field} />
+                            <Input type="email" placeholder="Email:" {...field} className="w-full" />
                         </FormItem>
                     )}
                 />
-                <div className="col-span-2">
-                    <span className="font-bold text-lg">Mudar senha</span>
-                </div>
+                <div className="sm:col-span-2 font-bold text-lg mt-2">Mudar senha</div>
                 <FormField
                     control={form.control}
                     name="passwordChange.oldPassword"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Senha antiga (Opcional):</FormLabel>
-                            <Input type="password" placeholder="*****" {...field} />
+                            <Input type="password" placeholder="*****" {...field} className="w-full" />
                         </FormItem>
                     )}
                 />
@@ -84,13 +82,15 @@ export function UserForm({ user }: Props) {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Senha nova (Opcional):</FormLabel>
-                            <Input type="password" placeholder="*****" {...field} />
+                            <Input type="password" placeholder="*****" {...field} className="w-full" />
                         </FormItem>
                     )}
                 />
-                <Button className="col-span-2 w-full" type="submit" disabled={isPending} variant={'blue'}>
-                    Enviar
-                </Button>
+                <div>
+                    <Button className="sm:col-span-2 w-full" type="submit" disabled={isPending} variant={'blue'}>
+                        Enviar
+                    </Button>
+                </div>
             </form>
         </Form>
     )

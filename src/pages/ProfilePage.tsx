@@ -19,7 +19,7 @@ export function ProfilePage() {
 
     return (
         <div className="bg-slate-50 rounded-md p-5">
-            <span className="font-bold text-xl mb-5">Atualizar Perfil:</span>
+            <span className="font-bold text-xl block mb-5">Atualizar Perfil:</span>
             <UserForm user={user} />
         </div>
     )

@@ -9,11 +9,15 @@ import { BorrowBookFormSchema } from '@/components/books/BorrowBookForm'
 import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-export const useBooks = (company_id?: string) => {
+interface GetBooksProps {
+    company_id?: string
+    size?: number
+}
+export const useBooks = ({ size, company_id }: GetBooksProps) => {
     const submit = async (): Promise<PaginationResponse<IBook>> => {
         const res = await api.get(`/books`, {
             params: {
-                size: 999,
+                size: size ?? 999,
                 companyId: company_id,
                 sort: 'createdAt,desc'
             }

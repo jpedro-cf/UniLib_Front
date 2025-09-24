@@ -12,7 +12,7 @@ export function CategoryDialog({ category, children }: Props) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="max-w-[95vw] sm:max-w-[425px] max-h-[95vh] overflow-y-scroll">
                 <DialogHeader>
                     <DialogTitle>Publicar Categoria</DialogTitle>
                 </DialogHeader>

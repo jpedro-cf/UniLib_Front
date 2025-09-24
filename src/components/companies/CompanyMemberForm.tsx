@@ -81,7 +81,7 @@ export function CompanyMemberForm({ company_id, member, closeDialog }: Props) {
                         </FormItem>
                     )}
                 />
-                <Button type="submit" className="mt-3" disabled={isPending}>
+                <Button type="submit" className="mt-3" disabled={isPending} variant={'blue'}>
                     Salvar
                 </Button>
             </form>

@@ -11,7 +11,7 @@ export function BookDialog({ book, children }: Props) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent className="sm:max-w-[900px]">
+            <DialogContent className="max-w-[95vw] sm:max-w-[900px] max-h-[95vh] overflow-y-scroll">
                 <DialogHeader>
                     <DialogTitle>{`${book ? 'Editar Livro' : 'Adicionar Livro'}`}</DialogTitle>
                 </DialogHeader>

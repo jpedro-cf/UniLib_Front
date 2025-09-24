@@ -4,7 +4,7 @@ import { IBook } from '@/interfaces/Book'
 import { useBooks } from '@/services/books'
 
 export const BooksPage = () => {
-    const { data, isLoading, isError, isSuccess } = useBooks()
+    const { data, isLoading, isError, isSuccess } = useBooks({})
 
     return (
         <>
@@ -19,7 +19,7 @@ export const BooksPage = () => {
             )}
 
             {isSuccess && data.content.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-9">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-9">
                     {data.content.map((book: IBook) => (
                         <BooksCard book={book} key={book.id} />
                     ))}

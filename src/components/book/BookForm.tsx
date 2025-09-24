@@ -180,7 +180,7 @@ export function BookForm({ book, closeDialog }: Props) {
                     control={form.control}
                     name="description"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="col-span-2 sm:col-span-1">
                             <FormLabel>Descrição:</FormLabel>
                             <Textarea placeholder="Descrição" rows={4} {...field} />
                         </FormItem>
@@ -190,7 +190,7 @@ export function BookForm({ book, closeDialog }: Props) {
                     control={form.control}
                     name="categories"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="col-span-2 sm:col-span-1">
                             <FormLabel>Categorias:</FormLabel>
                             <FormControl>
                                 <MultipleSelector
@@ -216,7 +216,7 @@ export function BookForm({ book, closeDialog }: Props) {
                         type="button"
                         variant={'destructive'}
                         className="w-full"
-                        disabled={isPending || isDeleting}
+                        disabled={isPending || isDeleting || !book}
                         onClick={handleDelete}
                     >
                         Deletar

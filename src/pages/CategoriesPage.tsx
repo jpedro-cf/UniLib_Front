@@ -24,7 +24,7 @@ export const CategoriesPage = () => {
             )}
 
             {(isLoading || isError) && (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-9">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
                     {Array.from({ length: 6 }, (_, i) => i + 1).map((item) => (
                         <SkeletonCard key={item} />
                     ))}
@@ -32,7 +32,7 @@ export const CategoriesPage = () => {
             )}
 
             {isSuccess && data?.content.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-9">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
                     {data.content.map((category: ICategory) => (
                         <CategoriesCard category={category} key={category.id} />
                     ))}

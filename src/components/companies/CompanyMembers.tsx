@@ -12,11 +12,11 @@ export function CompanyMembers({ company_id }: Props) {
     return (
         <>
             {!members.isLoading && !members.isError && (
-                <div className="mt-5">
+                <div className="mt-8">
                     <div className="flex justify-between items-start">
                         <h2 className="text-lg font-semibold mb-3">Equipe</h2>
                         <CompanyMemberDialog company_id={company_id}>
-                            <Button type="button" variant={'blue'}>
+                            <Button type="button" variant={'blue'} size={'sm'}>
                                 Adicionar Membro
                             </Button>
                         </CompanyMemberDialog>

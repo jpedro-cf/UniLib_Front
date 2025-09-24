@@ -71,20 +71,22 @@ export function BorrowBookForm({ book }: Props) {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="flex gap-3 items-end">
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col sm:flex-row gap-3 sm:items-end">
                 <FormField
                     control={form.control}
                     name="expiration"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Quando você quer retornar o livro?</FormLabel>
+                            <FormLabel>
+                                <div>Quando você quer retornar o livro?</div>
+                            </FormLabel>
                             <DatePicker selected={field.value} onSelect={field.onChange}>
                                 <FormControl>
                                     <Button
                                         variant={'outline'}
                                         type="button"
                                         className={cn(
-                                            'w-[240px] pl-3 text-left font-normal',
+                                            'w-full sm:w-[240px] pl-3 text-left font-normal',
                                             !field.value && 'text-muted-foreground'
                                         )}
                                     >

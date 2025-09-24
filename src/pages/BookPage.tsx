@@ -22,7 +22,7 @@ export const BookPage = () => {
     const navigate = useNavigate()
 
     const { data: book, isLoading, isRefetching, isSuccess, isError, refetch } = useBook(id!)
-    const { data: companyBooks, refetch: refetchCompanyBooks } = useBooks(book?.company.id)
+    const { data: companyBooks, refetch: refetchCompanyBooks } = useBooks({ company_id: book?.company.id, size: 999 })
 
     useEffect(() => {
         if (!id) {
@@ -60,7 +60,7 @@ export const BookPage = () => {
                             <img
                                 src={`${env.storage_url}/${book.image}`}
                                 alt={book.title}
-                                className="w-full h-[300px] lg:h-full object-cover rounded-lg"
+                                className="w-full h-[250px] lg:h-full object-cover rounded-lg"
                             />
                         </div>
                         <div className="lg:col-span-2">

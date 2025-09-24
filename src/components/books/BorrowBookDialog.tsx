@@ -10,7 +10,7 @@ export function BorrowBookDialog({ book, children }: Props) {
     return (
         <Dialog>
             <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="max-w-[95vw] sm:max-w-[500px]">
                 <DialogHeader>
                     <DialogTitle>{book.title}</DialogTitle>
                 </DialogHeader>

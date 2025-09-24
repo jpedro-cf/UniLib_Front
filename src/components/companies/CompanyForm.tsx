@@ -76,7 +76,10 @@ export const CompanyForm = ({ company, closeDialog }: Props) => {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-5 w-full bg-[#fff] p-8 rounded-md border">
+            <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="flex flex-col sm:flex-row gap-5 w-full bg-[#fff] p-8 rounded-md border"
+            >
                 <FormField
                     control={form.control}
                     name="image"
@@ -84,7 +87,7 @@ export const CompanyForm = ({ company, closeDialog }: Props) => {
                         <DragDropComponent
                             initialPreview={company ? `${env.storage_url}/${company.image}` : undefined}
                             onFileSelect={handleFileSelect}
-                            className={`w-full lg:w-[250px] h-[250px] ${
+                            className={`w-full sm:w-[250px] h-[150px] sm:h-[250px] ${
                                 fieldState.error && 'bg-red-50 border-red-400'
                             }`}
                         >
@@ -111,12 +114,12 @@ export const CompanyForm = ({ company, closeDialog }: Props) => {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Descrição:</FormLabel>
-                                <Textarea rows={6} placeholder="Descrição" {...field} />
+                                <Textarea rows={5} placeholder="Descrição" {...field} />
                             </FormItem>
                         )}
                     />
                     <div className="flex items-center gap-2">
-                        <Button disabled={pending} type="submit">
+                        <Button disabled={pending} type="submit" variant={'blue'}>
                             Salvar
                         </Button>
                         {company && (

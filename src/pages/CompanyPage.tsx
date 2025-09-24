@@ -37,7 +37,7 @@ export const CompanyPage = () => {
     }
 
     return (
-        <div className="m-5">
+        <div>
             <h2 className="text-xl font-semibold mb-3">{company.name}</h2>
             <Tabs defaultValue="details" className="w-full">
                 <TabsList>

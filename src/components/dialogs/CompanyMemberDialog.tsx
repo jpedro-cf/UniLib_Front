@@ -11,7 +11,7 @@ export function CompanyMemberDialog({ children, company_id }: Props) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="max-w-[95vw] sm:max-w-[425px] max-h-[95vh] overflow-y-scroll">
                 <DialogHeader>
                     <DialogTitle>Membro da Empresa</DialogTitle>
                 </DialogHeader>

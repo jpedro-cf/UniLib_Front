@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority'
 import { BookText, List, Star } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
-import logo from '../../../public/images/logo-ipsum.svg'
+import logo from '../../../public/images/logos/logo5.svg'
 import { CurrentUserInfo } from '@/components/users/CurrentUserInfo'
 import { useAuth } from '@/context/auth-context'
 
