@@ -26,7 +26,7 @@ export function RegisterPage() {
 
     return (
         <div className="flex items-center justify-center bg-slate-100 min-h-screen w-full">
-            <div className="p-5 rounded-md bg-white shadow-sm w-1/3">
+            <div className="p-5 rounded-md bg-white shadow-sm w-[95vw] md:w-1/3">
                 <h1 className="font-bold text-xl mb-5">Crie uma conta</h1>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col gap-5">
