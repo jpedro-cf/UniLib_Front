@@ -96,15 +96,19 @@ export const BookPage = () => {
                                 ))}
                             </div>
                             <div className="flex my-8 gap-5">
-                                <BorrowBookDialog book={book}>
-                                    <ToolTipComponent
-                                        content={user ? 'Pedir livro emprestado.' : 'Você precisa estar autenticado.'}
-                                    >
+                                {!user ? (
+                                    <ToolTipComponent content={'Você precisa estar autenticado.'}>
                                         <Button variant={'blue'} size={'lg'} className="w-auto" disabled={!user}>
                                             Obter livro <ShoppingBag size={16} className="ms-3" />
                                         </Button>
                                     </ToolTipComponent>
-                                </BorrowBookDialog>
+                                ) : (
+                                    <BorrowBookDialog book={book}>
+                                        <Button variant={'blue'} size={'lg'} className="w-auto" disabled={!user}>
+                                            Obter livro <ShoppingBag size={16} className="ms-3" />
+                                        </Button>
+                                    </BorrowBookDialog>
+                                )}
                             </div>
                             <CompanyInfo company={book.company} />
                         </div>
