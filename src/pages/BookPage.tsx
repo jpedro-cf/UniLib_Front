@@ -15,6 +15,7 @@ import { calculateMean } from '@/lib/utils'
 import { Ratings } from '@/components/ui/rating'
 import { BorrowBookDialog } from '@/components/books/BorrowBookDialog'
 import { useAuth } from '@/context/auth-context'
+import { ToolTipComponent } from '@/components/ui/tooltip'
 
 export const BookPage = () => {
     const { id } = useParams<{ id: IBook['id'] }>()
@@ -96,9 +97,13 @@ export const BookPage = () => {
                             </div>
                             <div className="flex my-8 gap-5">
                                 <BorrowBookDialog book={book}>
-                                    <Button variant={'blue'} size={'lg'} className="w-auto" disabled={!user}>
-                                        Obter livro <ShoppingBag size={16} className="ms-3" />
-                                    </Button>
+                                    <ToolTipComponent
+                                        content={user ? 'Pedir livro emprestado.' : 'Você precisa estar autenticado.'}
+                                    >
+                                        <Button variant={'blue'} size={'lg'} className="w-auto" disabled={!user}>
+                                            Obter livro <ShoppingBag size={16} className="ms-3" />
+                                        </Button>
+                                    </ToolTipComponent>
                                 </BorrowBookDialog>
                             </div>
                             <CompanyInfo company={book.company} />

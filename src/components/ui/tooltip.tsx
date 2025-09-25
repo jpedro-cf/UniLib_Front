@@ -33,7 +33,7 @@ interface ToolTipComponentProps extends React.PropsWithChildren {
 function ToolTipComponent({ children, content }: ToolTipComponentProps) {
     return (
         <Tooltip>
-            <TooltipTrigger asChild>{children}</TooltipTrigger>
+            <TooltipTrigger>{children}</TooltipTrigger>
             <TooltipContent>
                 <p>{content}</p>
             </TooltipContent>
