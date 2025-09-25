@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Document, Page, pdfjs } from 'react-pdf'
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -26,6 +26,27 @@ export const Reader = () => {
 
     const { data, isLoading, isRefetching, isError } = useReader(id!)
 
+    const [width, setWidth] = useState<number | null>(null)
+    const containerRef = useRef(null)
+
+    useEffect(() => {
+        const observer = new ResizeObserver((entries) => {
+            if (entries[0] && entries[0].contentRect.width) {
+                setWidth(entries[0].contentRect.width)
+            }
+        })
+
+        if (containerRef.current) {
+            observer.observe(containerRef.current)
+        }
+
+        return () => {
+            if (containerRef.current) {
+                observer.unobserve(containerRef.current)
+            }
+        }
+    }, [])
+
     useEffect(() => {
         if (!id) {
             navigate('/', { replace: true })
@@ -43,7 +64,7 @@ export const Reader = () => {
     return (
         <div className="flex flex-col items-center p-4">
             {/* Barra de controle */}
-            <div className="flex items-center gap-4 mb-3">
+            <div className="hidden sm:flex items-center gap-4 mb-3">
                 {/* Range Zoom */}
                 <div className="flex items-center gap-2">
                     <Search className="w-4 h-4 text-slate-700" />
@@ -107,12 +128,36 @@ export const Reader = () => {
             </div>
 
             {/* Render PDF */}
-            <Document
-                file={data?.url ?? '/documents/livro.pdf'}
-                onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-            >
-                <Page pageNumber={page} scale={scale} renderTextLayer={false} renderAnnotationLayer={false} />
-            </Document>
+            <div ref={containerRef} className="max-w-full h-auto overflow-auto border border-blue-100 rounded-md">
+                <Document
+                    file={data?.url ?? '/documents/livro.pdf'}
+                    onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+                >
+                    <Page
+                        pageNumber={page}
+                        width={width ?? undefined}
+                        renderTextLayer={false}
+                        renderAnnotationLayer={false}
+                    />
+                </Document>
+            </div>
+            <div className="mt-3 flex sm:hidden items-center gap-3">
+                <Button variant={'blue'} onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page <= 1}>
+                    <ChevronLeft className="w-5 h-5" />
+                </Button>
+
+                <span className="text-sm">
+                    {page} / {numPages || '—'}
+                </span>
+
+                <Button
+                    variant={'blue'}
+                    onClick={() => setPage((p) => Math.min(numPages, p + 1))}
+                    disabled={page >= numPages}
+                >
+                    <ChevronRight className="w-5 h-5" />
+                </Button>
+            </div>
         </div>
     )
 }
